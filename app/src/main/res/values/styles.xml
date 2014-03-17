@@ -5,4 +5,32 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="PlayListItem.Track" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">#363636</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="PlayListItem.Album" parent="PlayListItem.Track">
+        <item name="android:textColor">#777777</item>
+    </style>
+
+    <style name="RoomListItem.Name" parent="PlayListItem.Track">
+
+    </style>
+    <style name="RoomListItem.Queue" parent="@android:style/TextAppearance.Small">
+        <item name="android:textColor">#b0b0b0</item>
+    </style>
+
+    <style name="RoomListItem.Playing" parent="@android:style/TextAppearance.Small">
+        <item name="android:textColor">#b0b0b0</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="RoomListItem.Track" parent="@android:style/TextAppearance.Small">
+        <item name="android:textColor">#363636</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
 </resources>

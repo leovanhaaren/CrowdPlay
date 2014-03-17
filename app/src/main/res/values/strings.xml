@@ -5,4 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string name="room_overview_action_add">Create room</string>
+    <string name="room_overview_action_refresh">Refresh</string>
+
 </resources>
