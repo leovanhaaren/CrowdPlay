@@ -31,16 +31,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:id="@+id/playlist_list_item_track"
-                android:text="Track name"
+                android:id="@+id/playlist_list_item_title"
+                android:text="Title"
                 android:textAppearance="@style/PlayListItem.Track" />
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:id="@+id/playlist_list_item_album"
-                android:text="Album"
+                android:id="@+id/playlist_list_item_artist"
+                android:text="Artist"
                 android:textAppearance="@style/PlayListItem.Album" />
 
         </LinearLayout>

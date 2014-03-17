@@ -80,7 +80,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/playlist_list_item_art"
+                android:id="@+id/room_list_item_art"
                 android:scaleType="fitCenter"
                 android:background="#ccc" />
         </LinearLayout>

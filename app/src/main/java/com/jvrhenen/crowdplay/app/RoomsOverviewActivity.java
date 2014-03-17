@@ -38,7 +38,7 @@ public class RoomsOverviewActivity extends ActionBarActivity {
 
             builder.setPositiveButton(R.string.rooms_overview_dialog_ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    Toast.makeText(getApplicationContext(), "TODO: Create room", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "TODO: Create Room", Toast.LENGTH_SHORT).show();
                 }
             });
             builder.setNegativeButton(R.string.rooms_overview_dialog_cancel, new DialogInterface.OnClickListener() {
