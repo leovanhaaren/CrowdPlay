@@ -55,6 +55,16 @@ public class TracksRepository {
         return 0;
     }
 
+    public Dao.CreateOrUpdateStatus save(Track track)
+    {
+        try {
+            return tracksDao.createOrUpdate(track);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<Track> getAll()
     {
         try {

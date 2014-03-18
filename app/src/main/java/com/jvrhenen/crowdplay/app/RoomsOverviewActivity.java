@@ -2,6 +2,7 @@ package com.jvrhenen.crowdplay.app;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -15,7 +16,9 @@ import android.widget.Toast;
 
 import com.jvrhenen.crowdplay.app.Adapters.RoomListAdapter;
 import com.jvrhenen.crowdplay.app.data.RoomsRepository;
+import com.jvrhenen.crowdplay.app.data.TracksRepository;
 import com.jvrhenen.crowdplay.app.model.Room;
+import com.jvrhenen.crowdplay.app.model.Track;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,7 +56,9 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
     }
 
     public void openRoom(Room room) {
-        Toast.makeText(getApplicationContext(), "TODO: Open room", Toast.LENGTH_LONG).show();
+        Intent roomPlay = new Intent(this, RoomPlayActivity.class);
+        roomPlay.putExtra("roomId", room.getId());
+        startActivity(roomPlay);
     }
 
     @Override
@@ -83,6 +88,22 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
                         room.setDate(new Date());
 
                         roomsRepository.save(room);
+
+                        Track track1 = new Track();
+                        track1.setArtist("Jorick");
+                        track1.setTitle("Mooi nummer");
+                        track1.setRoom(room);
+
+                        Track track2 = new Track();
+                        track2.setArtist("Leo");
+                        track2.setTitle("Heel mooi nummer");
+                        track2.setRoom(room);
+
+                        TracksRepository repo = new TracksRepository(getApplication());
+                        repo.save(track1);
+                        repo.save(track2);
+
+
                         loadData();
                     } else {
                         Toast.makeText(getApplicationContext(), "Vul een Room naam in", Toast.LENGTH_LONG).show();

@@ -74,4 +74,14 @@ public class RoomsRepository {
         }
         return null;
     }
+
+    public Room getRoom(int id)
+    {
+        try {
+            return (Room)roomsDao.queryForId(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
