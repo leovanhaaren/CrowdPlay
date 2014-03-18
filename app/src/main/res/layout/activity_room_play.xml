@@ -96,7 +96,7 @@
 
         <Button
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:text="@string/room_play_button_add"
             android:id="@+id/button"
             android:layout_gravity="center_horizontal"
@@ -105,7 +105,36 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="5dp" />
+            android:layout_marginBottom="0dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:layout_marginBottom="3dp"
+        android:id="@+id/linearLayout3"
+        android:layout_below="@+id/linearLayout2">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/room_play_emptystate_title"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="20dp"
+            android:textAppearance="@style/Player.EmptyState.Title" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/room_play_emptystate_text"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="@style/Player.EmptyState.Text"
+            android:layout_marginRight="55dp"
+            android:layout_marginLeft="55dp" />
     </LinearLayout>
 
     <ListView
@@ -117,6 +146,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/linearLayout2" />
+        android:layout_below="@+id/linearLayout2"
+        android:background="@color/appBackground" />
 
 </RelativeLayout>
