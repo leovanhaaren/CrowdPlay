@@ -34,7 +34,7 @@ public class PlaylistListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Track getItem(int position) {
         return tracks.get(position);
     }
 
@@ -58,7 +58,7 @@ public class PlaylistListAdapter extends BaseAdapter {
         TextView  artist = (TextView) v.getTag(R.id.playlist_list_item_artist);
         ImageView art    = (ImageView)v.getTag(R.id.playlist_list_item_art);
 
-        Track track = (Track) getItem(position);
+        Track track = getItem(position);
 
         title.setText(track.getTitle());
         artist.setText(track.getArtist());

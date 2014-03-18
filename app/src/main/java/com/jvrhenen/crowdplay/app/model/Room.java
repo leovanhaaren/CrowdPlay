@@ -7,8 +7,6 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
 
-import io.segment.android.models.Track;
-
 /**
  * Created by Leo on 17/03/14.
  */

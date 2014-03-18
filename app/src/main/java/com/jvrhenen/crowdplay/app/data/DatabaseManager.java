@@ -11,6 +11,8 @@ public class DatabaseManager {
 
     private DatabaseHelper databaseHelper = null;
 
+
+
     public DatabaseHelper getHelper(Context context) {
         if (databaseHelper == null) {
             databaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);

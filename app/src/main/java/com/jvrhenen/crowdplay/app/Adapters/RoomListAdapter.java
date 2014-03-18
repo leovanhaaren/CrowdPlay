@@ -34,7 +34,7 @@ public class RoomListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Room getItem(int position) {
         return rooms.get(position);
     }
 
@@ -60,7 +60,7 @@ public class RoomListAdapter extends BaseAdapter {
         TextView  track = (TextView) v.getTag(R.id.room_list_item_track);
         ImageView art   = (ImageView)v.getTag(R.id.room_list_item_art);
 
-        Room room = (Room) getItem(position);
+        Room room = getItem(position);
 
         name.setText(room.getName());
         queue.setText(room.getTracks().size() + " items in queue");

@@ -45,14 +45,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
         RuntimeExceptionDao<Track, Integer> tracksDao = getTracksDataDao();
         RuntimeExceptionDao<Room, Integer>  roomsDao  = getRoomsDataDao();
-
-        Track track1 = new Track("Awakening", "Max Cooper");
-        tracksDao.create(track1);
-
-        Room room1 = new Room("Party al night long");
-        roomsDao.create(room1);
-
-        Log.i(DatabaseHelper.class.getName(), "created new entries in onCreate");
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.j256.ormlite.dao.Dao;
 import com.jvrhenen.crowdplay.app.model.Room;
 
 import java.sql.SQLException;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by Leo on 17/03/14.
@@ -55,10 +55,20 @@ public class RoomsRepository {
         return 0;
     }
 
-    public List<Room> getAll()
+    public Dao.CreateOrUpdateStatus save(Room room)
     {
         try {
-            return roomsDao.queryForAll();
+            return roomsDao.createOrUpdate(room);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ArrayList<Room> getAll()
+    {
+        try {
+            return (ArrayList<Room>)roomsDao.queryForAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
