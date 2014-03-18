@@ -61,4 +61,16 @@ public class Room {
         return tracks;
     }
 
+    public void addTrack(Track track) {
+        tracks.add(track);
+    }
+
+    public Track getCurrentTrack() {
+        return currentTrack;
+    }
+
+    public void setCurrentTrack(Track currentTrack) {
+        this.currentTrack = currentTrack;
+    }
+
 }
