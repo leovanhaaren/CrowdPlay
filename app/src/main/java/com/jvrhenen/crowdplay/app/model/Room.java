@@ -22,6 +22,9 @@ public class Room {
     @DatabaseField
     private Date date;
 
+    @DatabaseField(foreign = true, canBeNull = true)
+    private Track currentTrack;
+
     @ForeignCollectionField
     private ForeignCollection<Track> tracks;
 

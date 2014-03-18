@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.jvrhenen.crowdplay.app.Adapters.PlaylistListAdapter;
@@ -16,7 +17,10 @@ import java.util.ArrayList;
 public class RoomPlayActivity extends Activity {
 
     private RoomsRepository roomsRepository;
+
+    private int roomId;
     private Room room;
+
     private ArrayList<Track> tracks;
 
     private PlaylistListAdapter trackListViewAdapter;
@@ -27,11 +31,8 @@ public class RoomPlayActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_play);
 
-        int roomId = getIntent().getExtras().getInt("roomId");
+        roomId = getIntent().getExtras().getInt("roomId");
         roomsRepository =  new RoomsRepository(this);
-
-        room = roomsRepository.getRoom(roomId);
-        tracks = new ArrayList<Track>(room.getTracks());
 
         trackListView = (ListView)findViewById(R.id.listView);
 
@@ -39,8 +40,17 @@ public class RoomPlayActivity extends Activity {
     }
 
     public void loadData() {
+        room = roomsRepository.getRoom(roomId);
+        tracks = new ArrayList<Track>(room.getTracks());
+
         trackListViewAdapter = new PlaylistListAdapter(this, tracks);
         trackListView.setAdapter(trackListViewAdapter);
+
+        if(trackListViewAdapter.getCount() == 0) {
+            trackListView.setVisibility(View.INVISIBLE);
+        } else {
+            trackListView.setVisibility(View.VISIBLE);
+        }
     }
 
 

@@ -53,6 +53,12 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
 
         roomListView = (ListView)findViewById(R.id.listView);
         roomListView.setAdapter(roomListAdapter);
+
+        if(roomListAdapter.getCount() == 0) {
+            roomListView.setVisibility(View.INVISIBLE);
+        } else {
+            roomListView.setVisibility(View.VISIBLE);
+        }
     }
 
     public void openRoom(Room room) {

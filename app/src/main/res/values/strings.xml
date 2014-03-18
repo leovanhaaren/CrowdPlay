@@ -10,6 +10,10 @@
     <string name="rooms_overview_dialog_field">name</string>
     <string name="rooms_overview_dialog_cancel">Cancel</string>
     <string name="rooms_overview_dialog_ok">Ok</string>
+
+    <string name="rooms_overview_emptystate_title">No rooms found</string>
+    <string name="rooms_overview_emptystate_text">To search for rooms, press to refresh icon in the menu</string>
+
     <string name="room_play_action_broadcast">Broadcast room</string>
     <string name="room_play_action_edit">Edit room</string>
     <string name="room_play_button_add">Add track</string>
