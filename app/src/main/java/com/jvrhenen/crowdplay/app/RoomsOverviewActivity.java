@@ -65,6 +65,7 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
         Intent roomPlay = new Intent(this, RoomPlayActivity.class);
         roomPlay.putExtra("roomId", room.getId());
         startActivity(roomPlay);
+        this.overridePendingTransition(R.anim.animation_sub_enter, R.anim.animation_main_leave);
     }
 
     @Override
@@ -82,6 +83,7 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
 
             final EditText name = new EditText(this);
             name.setHint(R.string.rooms_overview_dialog_field);
+            name.setSingleLine();
             builder.setView(name);
 
             builder.setPositiveButton(R.string.rooms_overview_dialog_ok, new DialogInterface.OnClickListener() {
