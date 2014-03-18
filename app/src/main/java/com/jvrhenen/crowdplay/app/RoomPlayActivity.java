@@ -1,7 +1,11 @@
 package com.jvrhenen.crowdplay.app;
 
 import android.app.Activity;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +19,7 @@ import com.jvrhenen.crowdplay.app.listener.SwipeDismissListViewTouchListener;
 import com.jvrhenen.crowdplay.app.model.Room;
 import com.jvrhenen.crowdplay.app.model.Track;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -37,7 +42,24 @@ public class RoomPlayActivity extends Activity {
 
         roomId = getIntent().getExtras().getInt("roomId");
 
+<<<<<<< HEAD
         roomsRepository = new RoomsRepository(this);
+=======
+        loadData();
+        Log.i("Path", Environment.getExternalStorageDirectory().getPath());
+
+        try {
+            String url = "http://icecast.omroep.nl/3fm-bb-mp3"; // your URL here
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.prepare(); // might take long! (for buffering, etc)
+            mediaPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+>>>>>>> FETCH_HEAD
 
         room   = roomsRepository.getRoom(roomId);
         tracks = new ArrayList<Track>(room.getTracks());
