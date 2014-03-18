@@ -14,9 +14,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.jvrhenen.crowdplay.app.Adapters.RoomListAdapter;
+import com.jvrhenen.crowdplay.app.adapters.RoomListAdapter;
 import com.jvrhenen.crowdplay.app.data.RoomsRepository;
 import com.jvrhenen.crowdplay.app.data.TracksRepository;
+import com.jvrhenen.crowdplay.app.listener.SwipeDismissListViewTouchListener;
 import com.jvrhenen.crowdplay.app.model.Room;
 import com.jvrhenen.crowdplay.app.model.Track;
 
@@ -24,13 +25,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class RoomsOverviewActivity extends ActionBarActivity implements ListView.OnItemClickListener, ListView.OnItemLongClickListener {
+public class RoomsOverviewActivity extends ActionBarActivity implements ListView.OnItemClickListener {
 
     private ArrayList<Room> rooms;
     private RoomsRepository roomsRepository;
-    private RoomListAdapter roomListAdapter;
 
-    private ListView roomListView;
+    private ListView        roomListView;
+    private RoomListAdapter roomListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,27 +39,53 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
         setContentView(R.layout.activity_rooms_overview);
 
         roomsRepository = new RoomsRepository(this);
+        rooms           = roomsRepository.getAll();
 
-        roomListView = (ListView)findViewById(R.id.listView);
-        roomListView.setOnItemClickListener(this);
-        roomListView.setOnItemLongClickListener(this);
-
-        loadData();
-    }
-
-    public void loadData() {
-        rooms = roomsRepository.getAll();
-
+        roomListView    = (ListView)findViewById(R.id.listView);
         roomListAdapter = new RoomListAdapter(this, rooms);
-
-        roomListView = (ListView)findViewById(R.id.listView);
         roomListView.setAdapter(roomListAdapter);
 
-        if(roomListAdapter.getCount() == 0) {
-            roomListView.setVisibility(View.INVISIBLE);
-        } else {
-            roomListView.setVisibility(View.VISIBLE);
-        }
+        roomListView.setOnItemClickListener(this);
+
+        // Check if we have any results
+        checkEmptyState();
+
+        // Init Swipe to dismiss
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        roomListView,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    Room room = roomListAdapter.getItem(position);
+
+                                    roomsRepository.delete(room);
+                                    rooms.remove(room);
+                                }
+
+                                // Notify list for changes
+                                roomListAdapter.notifyDataSetChanged();
+                                checkEmptyState();
+
+                                Toast.makeText(getApplicationContext(), "Removed Room", Toast.LENGTH_LONG).show();
+                            }
+                        });
+        roomListView.setOnTouchListener(touchListener);
+        // Setting this scroll listener is required to ensure that during ListView scrolling,
+        // we don't look for swipes.
+        roomListView.setOnScrollListener(touchListener.makeScrollListener());
+    }
+
+    public void checkEmptyState() {
+        roomListView.setVisibility(
+                (roomListAdapter.getCount() == 0) ? View.INVISIBLE : View.VISIBLE
+        );
     }
 
     public void openRoom(Room room) {
@@ -96,6 +123,11 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
                         room.setDate(new Date());
 
                         roomsRepository.save(room);
+                        rooms.add(room);
+
+                        // Notify list of changes
+                        roomListAdapter.notifyDataSetChanged();
+                        checkEmptyState();
 
                         Track track1 = new Track();
                         track1.setArtist("Jorick");
@@ -110,9 +142,6 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
                         TracksRepository repo = new TracksRepository(getApplication());
                         repo.save(track1);
                         repo.save(track2);
-
-
-                        loadData();
                     } else {
                         Toast.makeText(getApplicationContext(), "Vul een Room naam in", Toast.LENGTH_LONG).show();
                     }
@@ -143,15 +172,4 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
         openRoom(room);
     }
 
-    @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-        Room room = roomListAdapter.getItem(position);
-        roomsRepository.delete(room);
-
-        loadData();
-
-        Toast.makeText(getApplicationContext(), "Removing Room", Toast.LENGTH_LONG).show();
-
-        return true;
-    }
 }

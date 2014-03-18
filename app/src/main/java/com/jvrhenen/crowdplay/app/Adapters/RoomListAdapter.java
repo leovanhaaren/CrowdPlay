@@ -1,4 +1,4 @@
-package com.jvrhenen.crowdplay.app.Adapters;
+package com.jvrhenen.crowdplay.app.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
