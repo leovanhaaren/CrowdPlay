@@ -33,8 +33,8 @@ public class Room {
     }
 
     public Room(String name){
-        this.name = name;
-        this.date = new Date();
+        this.name   = name;
+        this.date   = new Date();
     }
 
     public int getId() {

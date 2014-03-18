@@ -67,7 +67,7 @@ public class RoomPlayActivity extends Activity {
                                 for (int position : reverseSortedPositions) {
                                     Track track = playlistViewAdapter.getItem(position);
 
-                                    room.getTracks().remove(room);
+                                    room.getTracks().remove(track);
                                     tracks.remove(track);
                                 }
 
@@ -88,6 +88,15 @@ public class RoomPlayActivity extends Activity {
         playlistView.setVisibility(
                 (playlistView.getCount() == 0) ? View.INVISIBLE : View.VISIBLE
         );
+    }
+
+    public void addDemoTrack(View v) {
+        Track track = new Track("Test track", "Artist");
+        tracks.add(track);
+
+        // Notify list for changes
+        playlistViewAdapter.notifyDataSetChanged();
+        Toast.makeText(getApplicationContext(), "Added demo Track", Toast.LENGTH_SHORT).show();
     }
 
     @Override

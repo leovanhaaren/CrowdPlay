@@ -85,28 +85,21 @@
 
     </FrameLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
+    <Button
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
+        android:layout_height="45dp"
+        android:text="@string/room_play_button_add"
+        android:id="@+id/button"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/card_background"
+        android:textAppearance="@style/Player.AddTrack"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="4dp"
+        android:onClick="addDemoTrack"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/frameLayout"
-        android:id="@+id/linearLayout2">
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/room_play_button_add"
-            android:id="@+id/button"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/card_background"
-            android:textAppearance="@style/Player.AddTrack"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="0dp" />
-    </LinearLayout>
+        android:layout_below="@+id/frameLayout" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -115,7 +108,7 @@
         android:gravity="center"
         android:layout_marginBottom="3dp"
         android:id="@+id/linearLayout3"
-        android:layout_below="@+id/linearLayout2">
+        android:layout_below="@+id/button">
 
         <TextView
             android:layout_width="fill_parent"
@@ -144,9 +137,9 @@
         android:divider="@null"
         android:dividerHeight="0dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentLeft="false"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/linearLayout2"
-        android:background="@color/appBackground" />
+        android:background="@color/appBackground"
+        android:layout_below="@+id/button" />
 
 </RelativeLayout>

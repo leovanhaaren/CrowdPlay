@@ -12,7 +12,7 @@
     <string name="rooms_overview_dialog_ok">Ok</string>
 
     <string name="rooms_overview_emptystate_title">No rooms found</string>
-    <string name="rooms_overview_emptystate_text">To search for rooms, press to refresh icon in the menu</string>
+    <string name="rooms_overview_emptystate_text">To search for rooms, press icon in the menu to refresh</string>
 
     <string name="room_play_action_broadcast">Broadcast room</string>
     <string name="room_play_action_edit">Edit room</string>

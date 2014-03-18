@@ -20,7 +20,7 @@
     <style name="RoomListItem.Playing" parent="@android:style/TextAppearance.Small">
         <item name="android:textColor">#b0b0b0</item>
         <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:textStyle">normal</item>
+        <item name="android:textStyle">italic</item>
     </style>
 
     <style name="RoomListItem.Track" parent="@android:style/TextAppearance.Small">
@@ -44,7 +44,7 @@
     <style name="Player.Track" parent="@android:style/TextAppearance.Small">
         <item name="android:textColor">#FFF</item>
         <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:textStyle">normal</item>
+        <item name="android:textStyle">italic</item>
     </style>
 
     <style name="Player.AddTrack" parent="@android:style/TextAppearance.Small">

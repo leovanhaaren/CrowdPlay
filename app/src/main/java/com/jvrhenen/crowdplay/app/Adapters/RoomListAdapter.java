@@ -63,7 +63,10 @@ public class RoomListAdapter extends BaseAdapter {
         Room room = getItem(position);
 
         name.setText(room.getName());
-        queue.setText(room.getTracks().size() + " items in queue");
+        if(room.getTracks() != null)
+            queue.setText(room.getTracks().size() + " items in queue");
+        else
+            queue.setText("No items in queue");
         //track.setText(room.getCurrentTrack());
 
         // Set album art
