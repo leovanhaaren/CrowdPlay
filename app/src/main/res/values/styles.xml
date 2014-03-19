@@ -1,12 +1,22 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/ActionBar.Solid.Custom</item>
+    <style name="Theme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/Theme.ActionBar.Solid</item>
     </style>
 
-    <style name="ActionBar.Solid.Custom" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+    <style name="Theme.Transparent" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/Theme.ActionBar.Transparent</item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="Theme.ActionBar.Solid" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@drawable/actionbar_bg</item>
+    </style>
+
+    <style name="Theme.ActionBar.Transparent" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@drawable/actionbar_gradient</item>
+        <item name="android:inputType">textCapSentences</item>
     </style>
 
     <!-- Custom styles for rooms activity -->

@@ -85,9 +85,7 @@ public class RoomPlayActivity extends Activity {
     }
 
     public void checkEmptyState() {
-        playlistView.setVisibility(
-                (playlistView.getCount() == 0) ? View.INVISIBLE : View.VISIBLE
-        );
+        playlistView.setVisibility((playlistView.getCount() == 0) ? View.INVISIBLE : View.VISIBLE);
     }
 
     public void addDemoTrack(View v) {

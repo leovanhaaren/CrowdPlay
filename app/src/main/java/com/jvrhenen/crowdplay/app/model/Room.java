@@ -33,7 +33,7 @@ public class Room {
     }
 
     public Room(String name){
-        this.name   = name;
+        this.name   = name.toLowerCase();
         this.date   = new Date();
     }
 
@@ -42,11 +42,11 @@ public class Room {
     }
 
     public String getName() {
-        return name;
+        return name.substring(0,1).toUpperCase() + name.substring(1);
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.toLowerCase();
     }
 
     public Date getDate() {

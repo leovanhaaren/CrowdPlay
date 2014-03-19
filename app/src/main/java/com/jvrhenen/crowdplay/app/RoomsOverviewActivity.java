@@ -83,9 +83,7 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
     }
 
     public void checkEmptyState() {
-        roomListView.setVisibility(
-                (roomListAdapter.getCount() == 0) ? View.INVISIBLE : View.VISIBLE
-        );
+        roomListView.setVisibility((roomListAdapter.getCount() == 0) ? View.INVISIBLE : View.VISIBLE);
     }
 
     public void openRoom(Room room) {
