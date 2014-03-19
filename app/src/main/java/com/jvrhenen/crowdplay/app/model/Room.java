@@ -20,6 +20,9 @@ public class Room {
     private String name;
 
     @DatabaseField
+    private String owner;
+
+    @DatabaseField
     private Date date;
 
     @DatabaseField(foreign = true, canBeNull = true)
@@ -32,9 +35,10 @@ public class Room {
         // ORMLite needs a no-arg constructor
     }
 
-    public Room(String name){
-        this.name   = name.toLowerCase();
-        this.date   = new Date();
+    public Room(String name, String androidId) {
+        this.name  = name.toLowerCase();
+        this.owner = androidId;
+        this.date  = new Date();
     }
 
     public int getId() {
@@ -47,6 +51,14 @@ public class Room {
 
     public void setName(String name) {
         this.name = name.toLowerCase();
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public Date getDate() {

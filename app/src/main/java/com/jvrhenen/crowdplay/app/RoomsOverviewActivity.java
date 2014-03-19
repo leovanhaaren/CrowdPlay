@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -22,7 +23,6 @@ import com.jvrhenen.crowdplay.app.model.Room;
 import com.jvrhenen.crowdplay.app.model.Track;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class RoomsOverviewActivity extends ActionBarActivity implements ListView.OnItemClickListener {
@@ -116,9 +116,8 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
                     Log.i("Create Room", ""+name.getText());
                     String roomName = name.getText().toString();
                     if(roomName.length() > 0) {
-                        Room room = new Room();
-                        room.setName(roomName);
-                        room.setDate(new Date());
+                        String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                        Room room = new Room(roomName, androidId);
 
                         roomsRepository.save(room);
                         rooms.add(room);
