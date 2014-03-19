@@ -88,7 +88,7 @@ public class RoomPlayActivity extends Activity {
         playlistView.setVisibility((playlistView.getCount() == 0) ? View.INVISIBLE : View.VISIBLE);
     }
 
-    public void addDemoTrack(View v) {
+    public void addDemoTrack() {
         Track track = new Track("Test track", "Artist");
         tracks.add(track);
 
@@ -109,6 +109,10 @@ public class RoomPlayActivity extends Activity {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 this.overridePendingTransition(R.anim.animation_main_enter, R.anim.animation_sub_leave);
+                return true;
+            case R.id.room_play_action_add:
+                addDemoTrack();
+
                 return true;
         }
         return super.onOptionsItemSelected(item);

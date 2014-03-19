@@ -1,8 +1,10 @@
 package com.jvrhenen.crowdplay.app;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
@@ -33,10 +35,13 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
     private ListView        roomListView;
     private RoomListAdapter roomListAdapter;
 
+    private MenuItem menuItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rooms_overview);
+        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
 
         roomsRepository = new RoomsRepository(this);
         rooms           = roomsRepository.getAll();
@@ -158,6 +163,12 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
         if (id == R.id.rooms_overview_action_refresh) {
             Toast.makeText(getApplicationContext(), "Searching for rooms", Toast.LENGTH_SHORT).show();
 
+            menuItem = item;
+            menuItem.setActionView(R.layout.progressbar);
+            menuItem.expandActionView();
+            TestTask task = new TestTask();
+            task.execute("test");
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -168,5 +179,27 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
         Room room  = roomListAdapter.getItem(position);
         openRoom(room);
     }
+
+    private class TestTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            // Simulate something long running
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            menuItem.collapseActionView();
+            menuItem.setActionView(null);
+
+            Toast.makeText(getApplicationContext(), "No rooms found", Toast.LENGTH_SHORT).show();
+        }
+    };
 
 }

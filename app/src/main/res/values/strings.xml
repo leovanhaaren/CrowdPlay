@@ -16,7 +16,7 @@
 
     <string name="room_play_action_broadcast">Broadcast room</string>
     <string name="room_play_action_edit">Edit room</string>
-    <string name="room_play_button_add">Add track</string>
+    <string name="room_play_action_add">Add track</string>
 
     <string name="room_play_title">Play</string>
 
