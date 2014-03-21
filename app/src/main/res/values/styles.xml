@@ -3,10 +3,12 @@
     <!-- Base application theme. -->
     <style name="Theme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/Theme.ActionBar.Solid</item>
+        <item name="android:icon">@drawable/icon</item>
     </style>
 
     <style name="Theme.Transparent" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/Theme.ActionBar.Transparent</item>
+        <item name="android:icon">@drawable/icon</item>
         <item name="android:windowActionBarOverlay">true</item>
     </style>
 
@@ -62,7 +64,7 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="PlayListItem.Track" parent="@android:style/TextAppearance.Medium">
+    <style name="PlayListItem.Track" parent="@android:style/TextAppearance.Small">
         <item name="android:textColor">#363636</item>
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textStyle">normal</item>

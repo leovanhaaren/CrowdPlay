@@ -75,7 +75,7 @@ public class RoomPlayActivity extends Activity {
                                 playlistViewAdapter.notifyDataSetChanged();
                                 checkEmptyState();
 
-                                Toast.makeText(getApplicationContext(), "Removed Track", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Removed Track", Toast.LENGTH_SHORT).show();
                             }
                         });
         playlistView.setOnTouchListener(touchListener);

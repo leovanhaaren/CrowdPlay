@@ -38,3 +38,5 @@ proguard/
 
 .DS_Store
 app/src/main/res/values/analytics.xml
+
+app/build.gradle

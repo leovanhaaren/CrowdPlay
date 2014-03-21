@@ -145,7 +145,7 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
                         repo.save(track1);
                         repo.save(track2);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Vul een Room naam in", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Vul een Room naam in", Toast.LENGTH_SHORT).show();
                     }
 //                    Toast.makeText(getApplicationContext(), "TODO: Create Room", Toast.LENGTH_SHORT).show();
                 }
