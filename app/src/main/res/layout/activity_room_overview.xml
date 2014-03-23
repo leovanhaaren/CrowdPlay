@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jvrhenen.crowdplay.app.RoomsOverviewActivity"
+    tools:context="com.jvrhenen.crowdplay.app.RoomOverviewActivity"
     android:background="@color/appBackground">
 
     <FrameLayout
@@ -20,19 +20,19 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/rooms_overview_emptystate_title"
+                android:text="@string/room_overview_emptystate_title"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_margin="20dp"
-                android:textAppearance="@style/Player.EmptyState.Title" />
+                android:textAppearance="@style/EmptyState.Title" />
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/rooms_overview_emptystate_text"
+                android:text="@string/room_overview_emptystate_text"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textAppearance="@style/Player.EmptyState.Text"
+                android:textAppearance="@style/EmptyState.Text"
                 android:layout_marginRight="55dp"
                 android:layout_marginLeft="55dp" />
         </LinearLayout>

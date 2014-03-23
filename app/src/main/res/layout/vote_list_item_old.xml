@@ -23,7 +23,7 @@
         android:id="@+id/playlist_list_item_art"
         android:scaleType="centerCrop"
         android:background="#ccc"
-        android:src="@drawable/art_default" />
+        android:src="@drawable/ic_action_help" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
         android:layout_alignEnd="@+id/playlist_list_item_title" />
 
     <View
-        android:id="@+id/horizontal_divider"
+        android:id="@+id/vertical_divider"
         android:layout_height="32dp"
         android:layout_width="1dp"
         android:background="#CCC"
@@ -65,7 +65,7 @@
         android:id="@+id/imageButton"
         android:layout_alignWithParentIfMissing="false"
         android:background="@drawable/ic_action_good"
-        android:layout_alignTop="@+id/horizontal_divider"
+        android:layout_alignTop="@+id/vertical_divider"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginLeft="8dp" />

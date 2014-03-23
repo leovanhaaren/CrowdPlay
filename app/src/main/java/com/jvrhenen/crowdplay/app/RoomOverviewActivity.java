@@ -24,7 +24,7 @@ import com.jvrhenen.crowdplay.app.model.Room;
 import java.util.ArrayList;
 
 
-public class RoomsOverviewActivity extends ActionBarActivity implements ListView.OnItemClickListener {
+public class RoomOverviewActivity extends ActionBarActivity implements ListView.OnItemClickListener {
 
     private ArrayList<Room> rooms;
     private RoomsRepository roomsRepository;
@@ -37,7 +37,7 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rooms_overview);
+        setContentView(R.layout.activity_room_overview);
         getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
 
         roomsRepository = new RoomsRepository(this);
@@ -89,14 +89,14 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
     }
 
     public void openRoom(Room room) {
-        Intent roomPlay = new Intent(this, RoomHostActivity.class);
+        Intent roomPlay = new Intent(this, RoomPlayActivity.class);
         roomPlay.putExtra("roomId", room.getId());
         startActivity(roomPlay);
         this.overridePendingTransition(R.anim.animation_sub_enter, R.anim.animation_main_leave);
     }
 
     public void openRoomPlaylist(Room room) {
-        Intent roomPlay = new Intent(this, RoomContributorActivity.class);
+        Intent roomPlay = new Intent(this, RoomPlaylistActivity.class);
         roomPlay.putExtra("roomId", room.getId());
         startActivity(roomPlay);
         this.overridePendingTransition(R.anim.animation_sub_enter, R.anim.animation_main_leave);
@@ -104,7 +104,7 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.rooms_overview, menu);
+        getMenuInflater().inflate(R.menu.room_overview, menu);
         return true;
     }
 
@@ -117,7 +117,7 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
             return true;
         }
         if (id == R.id.rooms_overview_action_refresh) {
-            Toast.makeText(getApplicationContext(), R.string.rooms_overview_action_refresh_message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.room_overview_action_refresh_message, Toast.LENGTH_SHORT).show();
 
             menuItem = item;
             menuItem.setActionView(R.layout.progressbar);
@@ -138,20 +138,20 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
 
     public void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.rooms_overview_dialog_title);
+        builder.setTitle(R.string.room_overview_dialog_title);
 
         // Make a custom text field
         final EditText name = new EditText(this);
-        name.setHint(R.string.rooms_overview_dialog_field);
+        name.setHint(R.string.room_overview_dialog_field);
         name.setSingleLine();
         builder.setView(name);
 
-        builder.setPositiveButton(R.string.rooms_overview_dialog_ok, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.room_overview_dialog_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 String roomName  = name.getText().toString();
 
                 if(roomName.length() == 0) {
-                    Toast.makeText(getApplicationContext(), R.string.rooms_overview_dialog_field_empty, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.room_overview_dialog_field_empty, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -164,7 +164,7 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
                 openRoom(room);
             }
         });
-        builder.setNegativeButton(R.string.rooms_overview_dialog_cancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.room_overview_dialog_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }
@@ -192,7 +192,7 @@ public class RoomsOverviewActivity extends ActionBarActivity implements ListView
             menuItem.collapseActionView();
             menuItem.setActionView(null);
 
-            Toast.makeText(getApplicationContext(), R.string.rooms_overview_action_refresh_noresults, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.room_overview_action_refresh_noresults, Toast.LENGTH_SHORT).show();
         }
     };
 

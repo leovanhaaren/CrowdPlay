@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.jvrhenen.crowdplay.app.adapters.ContributorListAdapter;
+import com.jvrhenen.crowdplay.app.adapters.VoteListAdapter;
 import com.jvrhenen.crowdplay.app.data.RoomsRepository;
 import com.jvrhenen.crowdplay.app.model.Room;
 import com.jvrhenen.crowdplay.app.model.Track;
@@ -17,13 +17,13 @@ import com.jvrhenen.crowdplay.app.model.Track;
 import java.util.ArrayList;
 
 
-public class RoomContributorActivity extends Activity {
+public class RoomPlaylistActivity extends Activity {
 
     private ArrayList<Track>    tracks;
     private RoomsRepository     roomsRepository;
 
-    private ListView               playlistView;
-    private ContributorListAdapter contributorListAdapter;
+    private ListView        playlistView;
+    private VoteListAdapter voteListAdapter;
 
     private int roomId;
     private Room room;
@@ -31,7 +31,7 @@ public class RoomContributorActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_room_contributor);
+        setContentView(R.layout.activity_room_playlist);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         roomId = getIntent().getExtras().getInt("roomId");
@@ -42,8 +42,8 @@ public class RoomContributorActivity extends Activity {
         tracks = new ArrayList<Track>(room.getTracks());
 
         playlistView           = (ListView)findViewById(R.id.listView);
-        contributorListAdapter = new ContributorListAdapter(this, tracks);
-        playlistView.setAdapter(contributorListAdapter);
+        voteListAdapter = new VoteListAdapter(this, tracks);
+        playlistView.setAdapter(voteListAdapter);
 
         // Check if we have any results
         checkEmptyState();
@@ -61,7 +61,7 @@ public class RoomContributorActivity extends Activity {
         tracks.add(track);
 
         // Notify list for changes
-        contributorListAdapter.notifyDataSetChanged();
+        voteListAdapter.notifyDataSetChanged();
         checkEmptyState();
 
         Toast.makeText(getApplicationContext(), "Added demo Track", Toast.LENGTH_SHORT).show();

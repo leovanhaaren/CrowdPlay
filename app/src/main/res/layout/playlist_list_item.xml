@@ -17,10 +17,10 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/playlist_list_item_art"
-            android:scaleType="centerCrop"
+            android:scaleType="center"
             android:background="#ccc"
             android:layout_marginBottom="2dp"
-            android:src="@drawable/art_default" />
+            android:src="@drawable/ic_action_help" />
 
         <TextView
             android:layout_width="wrap_content"

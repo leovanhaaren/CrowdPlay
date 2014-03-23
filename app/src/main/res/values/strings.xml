@@ -3,27 +3,30 @@
 
     <string name="app_name">CrowdPlay</string>
 
-    <string name="rooms_overview_action_add">Create room</string>
-    <string name="rooms_overview_action_refresh">Refresh</string>
-    <string name="rooms_overview_action_refresh_message">Searching for rooms</string>
-    <string name="rooms_overview_action_refresh_noresults">No rooms found</string>
+    <string name="room_overview_action_add">Create room</string>
+    <string name="room_overview_action_refresh">Refresh</string>
+    <string name="room_overview_action_refresh_message">Searching for rooms</string>
+    <string name="room_overview_action_refresh_noresults">No rooms found</string>
+    <string name="room_overview_dialog_title">Create room</string>
+    <string name="room_overview_dialog_field">name</string>
+    <string name="room_overview_dialog_cancel">Cancel</string>
+    <string name="room_overview_dialog_ok">Create</string>
+    <string name="room_overview_dialog_field_empty">Please enter a name</string>
+    <string name="room_overview_emptystate_title">No rooms found</string>
+    <string name="room_overview_emptystate_text">To search for rooms, press icon in the menu to refresh</string>
 
-    <string name="rooms_overview_dialog_title">Create room</string>
-    <string name="rooms_overview_dialog_field">name</string>
-    <string name="rooms_overview_dialog_cancel">Cancel</string>
-    <string name="rooms_overview_dialog_ok">Ok</string>
-    <string name="rooms_overview_dialog_field_empty">Please enter a name</string>
-
-    <string name="rooms_overview_emptystate_title">No rooms found</string>
-    <string name="rooms_overview_emptystate_text">To search for rooms, press icon in the menu to refresh</string>
-
+    <string name="room_play_title">Play</string>
     <string name="room_play_action_broadcast">Broadcast room</string>
     <string name="room_play_action_edit">Edit room</string>
     <string name="room_play_action_add">Add track</string>
-
-    <string name="room_play_title">Play</string>
-
-    <string name="room_play_emptystate_title">No tracks found</string>
+    <string name="room_play_dialog_title">Edit room</string>
+    <string name="room_play_dialog_field">name</string>
+    <string name="room_play_dialog_cancel">Cancel</string>
+    <string name="room_play_dialog_ok">Save</string>
+    <string name="room_play_emptystate_title">Playlist is empty</string>
     <string name="room_play_emptystate_text">Add a local track or ask collaborators to add their tracks</string>
+
+    <string name="room_playlist_emptystate_title">Playlist is empty</string>
+    <string name="room_playlist_emptystate_text">To add a track, press the icon in the menu</string>
 
 </resources>

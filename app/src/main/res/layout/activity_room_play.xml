@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jvrhenen.crowdplay.app.RoomsOverviewActivity"
+    tools:context="com.jvrhenen.crowdplay.app.RoomOverviewActivity"
     android:background="@color/appBackground">
 
     <FrameLayout
@@ -58,30 +58,60 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/frameLayout"
-            android:id="@+id/linearLayout"
             android:background="#FFF"
             android:layout_gravity="bottom"
-            android:gravity="center">
+            android:gravity="center"
+            android:weightSum="1">
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageButton"
-                android:background="@drawable/ic_action_previous" />
+            <TextView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:text="0:00"
+                android:id="@+id/currentTime"
+                android:gravity="center"
+                android:layout_alignLeft="@+id/linearLayout"
+                android:layout_alignStart="@+id/linearLayout"
+                android:layout_weight="0.50"
+                android:textAppearance="@style/Player.Duration" />
 
-            <ImageButton
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageButton2"
-                android:background="@drawable/ic_action_play"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp" />
+                android:layout_height="wrap_content">
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageButton3"
-                android:background="@drawable/ic_action_next" />
+                <ImageButton
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:id="@+id/imageButton"
+                    android:style="?android:attr/borderlessButtonStyle"
+                    android:src="@drawable/ic_action_previous" />
+
+                <ImageButton
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:id="@+id/imageButton2"
+                    android:src="@drawable/ic_action_play"
+                    android:style="?android:attr/borderlessButtonStyle" />
+
+                <ImageButton
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:id="@+id/imageButton3"
+                    android:style="?android:attr/borderlessButtonStyle"
+                    android:src="@drawable/ic_action_next" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:text="0:00"
+                android:id="@+id/duration"
+                android:gravity="center"
+                android:layout_alignLeft="@+id/linearLayout"
+                android:layout_alignStart="@+id/linearLayout"
+                android:layout_weight="0.50"
+                android:textAppearance="@style/Player.Duration" />
+
         </LinearLayout>
 
         <SeekBar
@@ -125,7 +155,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_margin="20dp"
-            android:textAppearance="@style/Player.EmptyState.Title" />
+            android:textAppearance="@style/EmptyState.Title" />
 
         <TextView
             android:layout_width="fill_parent"
@@ -133,7 +163,7 @@
             android:text="@string/room_play_emptystate_text"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textAppearance="@style/Player.EmptyState.Text"
+            android:textAppearance="@style/EmptyState.Text"
             android:layout_marginRight="55dp"
             android:layout_marginLeft="55dp" />
     </LinearLayout>

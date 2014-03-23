@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.jvrhenen.crowdplay.app.adapters.HostListAdapter;
+import com.jvrhenen.crowdplay.app.adapters.PlayListAdapter;
 import com.jvrhenen.crowdplay.app.data.RoomsRepository;
 import com.jvrhenen.crowdplay.app.listener.SwipeDismissListViewTouchListener;
 import com.jvrhenen.crowdplay.app.model.Room;
@@ -18,13 +18,13 @@ import com.jvrhenen.crowdplay.app.model.Track;
 import java.util.ArrayList;
 
 
-public class RoomHostActivity extends Activity {
+public class RoomPlayActivity extends Activity {
 
     private ArrayList<Track>    tracks;
     private RoomsRepository     roomsRepository;
 
     private ListView        playlistView;
-    private HostListAdapter hostListAdapter;
+    private PlayListAdapter playListAdapter;
 
     private int roomId;
     private Room room;
@@ -32,7 +32,7 @@ public class RoomHostActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_room_host);
+        setContentView(R.layout.activity_room_play);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         roomId = getIntent().getExtras().getInt("roomId");
@@ -43,8 +43,8 @@ public class RoomHostActivity extends Activity {
         tracks = new ArrayList<Track>(room.getTracks());
 
         playlistView        = (ListView)findViewById(R.id.listView);
-        hostListAdapter = new HostListAdapter(this, tracks);
-        playlistView.setAdapter(hostListAdapter);
+        playListAdapter = new PlayListAdapter(this, tracks);
+        playlistView.setAdapter(playListAdapter);
 
         // Check if we have any results
         checkEmptyState();
@@ -65,14 +65,14 @@ public class RoomHostActivity extends Activity {
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    Track track = hostListAdapter.getItem(position);
+                                    Track track = playListAdapter.getItem(position);
 
                                     room.getTracks().remove(track);
                                     tracks.remove(track);
                                 }
 
                                 // Notify list for changes
-                                hostListAdapter.notifyDataSetChanged();
+                                playListAdapter.notifyDataSetChanged();
                                 checkEmptyState();
 
                                 Toast.makeText(getApplicationContext(), "Removed Track", Toast.LENGTH_SHORT).show();
@@ -93,7 +93,7 @@ public class RoomHostActivity extends Activity {
         tracks.add(track);
 
         // Notify list for changes
-        hostListAdapter.notifyDataSetChanged();
+        playListAdapter.notifyDataSetChanged();
         checkEmptyState();
 
         Toast.makeText(getApplicationContext(), "Added demo Track", Toast.LENGTH_SHORT).show();
