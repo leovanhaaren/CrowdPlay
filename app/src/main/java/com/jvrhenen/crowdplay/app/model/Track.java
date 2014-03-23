@@ -13,10 +13,19 @@ public class Track {
     private int id;
 
     @DatabaseField
-    private String title;
+    private long trackId;
 
     @DatabaseField
     private String artist;
+
+    @DatabaseField
+    private String title;
+
+    @DatabaseField
+    private String album;
+
+    @DatabaseField
+    private long duration;
 
     @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
     private Room room;

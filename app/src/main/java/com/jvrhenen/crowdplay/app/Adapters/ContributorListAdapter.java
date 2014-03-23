@@ -16,13 +16,13 @@ import java.util.ArrayList;
 /**
  * Created by Leo on 17/03/14.
  */
-public class PlaylistListAdapter extends BaseAdapter {
+public class ContributorListAdapter extends BaseAdapter {
 
     private Context          context;
     private ArrayList<Track> tracks;
     private LayoutInflater   inflater;
 
-    public PlaylistListAdapter(Context c, ArrayList<Track> e) {
+    public ContributorListAdapter(Context c, ArrayList<Track> e) {
         inflater = LayoutInflater.from(c);
         context  = c;
         tracks   = e;
@@ -48,7 +48,7 @@ public class PlaylistListAdapter extends BaseAdapter {
         View v = convertView;
 
         if(v == null) {
-            v = inflater.inflate(R.layout.playlist_list_item, parent, false);
+            v = inflater.inflate(R.layout.contributor_list_item, parent, false);
             v.setTag(R.id.playlist_list_item_title,  v.findViewById(R.id.playlist_list_item_title));
             v.setTag(R.id.playlist_list_item_artist, v.findViewById(R.id.playlist_list_item_artist));
             v.setTag(R.id.playlist_list_item_art,    v.findViewById(R.id.playlist_list_item_art));

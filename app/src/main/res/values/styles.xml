@@ -17,8 +17,7 @@
     </style>
 
     <style name="Theme.ActionBar.Transparent" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@drawable/actionbar_gradient</item>
-        <item name="android:inputType">textCapSentences</item>
+        <item name="android:background">@null</item>
     </style>
 
     <!-- Custom styles for rooms activity -->
@@ -64,13 +63,16 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="PlayListItem.Track" parent="@android:style/TextAppearance.Small">
+    <style name="PlayListItem.Track" parent="@android:style/TextAppearance.Medium">
         <item name="android:textColor">#363636</item>
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textStyle">normal</item>
     </style>
     <style name="PlayListItem.Album" parent="PlayListItem.Track">
         <item name="android:textColor">#777777</item>
+    </style>
+    <style name="PlayListItem.Vote" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">#777</item>
     </style>
 
 </resources>

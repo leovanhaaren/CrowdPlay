@@ -26,7 +26,7 @@
 
             <FrameLayout
                 android:layout_width="fill_parent"
-                android:layout_height="75dp"
+                android:layout_height="64dp"
                 android:layout_gravity="bottom"
                 android:background="@drawable/art_gradient">
 
@@ -42,12 +42,19 @@
                 android:layout_marginBottom="10dp"
                 android:textAppearance="@style/Player.Track" />
 
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="64dp"
+                android:layout_gravity="center_horizontal|top"
+                android:background="@drawable/actionbar_gradient"
+                android:id="@+id/frameLayout2" />
+
         </FrameLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
+            android:layout_height="48dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/frameLayout"
@@ -88,10 +95,10 @@
 
     </FrameLayout>
 
-    <!--<Button
+    <Button
         android:layout_width="fill_parent"
-        android:layout_height="45dp"
-        android:text="@string/room_play_button_add"
+        android:layout_height="48dp"
+        android:text="@string/room_play_action_add"
         android:id="@+id/button"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/card_bg"
@@ -99,19 +106,17 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="4dp"
         android:onClick="addDemoTrack"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/frameLayout" />-->
+        android:layout_below="@+id/frameLayout" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center"
-        android:layout_marginBottom="3dp"
         android:id="@+id/linearLayout3"
-        android:layout_below="@+id/frameLayout">
+        android:layout_below="@+id/button">
 
         <TextView
             android:layout_width="fill_parent"
@@ -135,16 +140,17 @@
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:id="@+id/listView"
-        android:divider="@null"
-        android:dividerHeight="0dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="true"
         android:background="@color/appBackground"
-        android:layout_below="@+id/frameLayout"
         android:paddingTop="4dp"
-        android:paddingBottom="4dp" />
+        android:paddingBottom="4dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:layout_below="@+id/button"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

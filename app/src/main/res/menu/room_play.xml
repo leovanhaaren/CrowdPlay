@@ -13,9 +13,4 @@
         android:enabled="false"
         android:showAsAction="always" />
 
-    <item android:id="@+id/room_play_action_add"
-        android:icon="@drawable/ic_action_new"
-        android:title="@string/room_play_action_add"
-        android:showAsAction="always" />
-
 </menu>
