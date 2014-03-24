@@ -83,7 +83,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:id="@+id/imageButton"
-                    android:style="?android:attr/borderlessButtonStyle"
+                    style="?android:attr/borderlessButtonStyle"
                     android:src="@drawable/ic_action_previous" />
 
                 <ImageButton
@@ -91,13 +91,13 @@
                     android:layout_height="48dp"
                     android:id="@+id/imageButton2"
                     android:src="@drawable/ic_action_play"
-                    android:style="?android:attr/borderlessButtonStyle" />
+                    style="?android:attr/borderlessButtonStyle" />
 
                 <ImageButton
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:id="@+id/imageButton3"
-                    android:style="?android:attr/borderlessButtonStyle"
+                    style="?android:attr/borderlessButtonStyle"
                     android:src="@drawable/ic_action_next" />
             </LinearLayout>
 
@@ -168,7 +168,7 @@
             android:layout_marginLeft="55dp" />
     </LinearLayout>
 
-    <ListView
+    <de.timroes.android.listview.EnhancedListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView"

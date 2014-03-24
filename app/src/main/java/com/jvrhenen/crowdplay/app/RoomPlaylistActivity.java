@@ -6,6 +6,8 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,13 +19,13 @@ import com.jvrhenen.crowdplay.app.model.Track;
 import java.util.ArrayList;
 
 
-public class RoomPlaylistActivity extends Activity {
+public class RoomPlaylistActivity extends Activity implements OnItemClickListener {
 
-    private ArrayList<Track>    tracks;
-    private RoomsRepository     roomsRepository;
+    private ArrayList<Track> tracks;
+    private RoomsRepository  roomsRepository;
 
-    private ListView        playlistView;
-    private VoteListAdapter voteListAdapter;
+    private ListView        mListView;
+    private VoteListAdapter mAdapter;
 
     private int roomId;
     private Room room;
@@ -39,32 +41,17 @@ public class RoomPlaylistActivity extends Activity {
         roomsRepository = new RoomsRepository(this);
 
         room   = roomsRepository.getRoom(roomId);
-        tracks = new ArrayList<Track>(room.getTracks());
+        tracks = new ArrayList<Track>(room.getPlaylist());
 
-        playlistView           = (ListView)findViewById(R.id.listView);
-        voteListAdapter = new VoteListAdapter(this, tracks);
-        playlistView.setAdapter(voteListAdapter);
+        mListView = (ListView)findViewById(R.id.listView);
+        mAdapter = new VoteListAdapter(this, tracks);
+        mListView.setAdapter(mAdapter);
 
         // Check if we have any results
         checkEmptyState();
 
         // Display the room's name as title for player activity
         getActionBar().setTitle(room.getName());
-    }
-
-    public void checkEmptyState() {
-        playlistView.setVisibility((playlistView.getCount() == 0) ? View.INVISIBLE : View.VISIBLE);
-    }
-
-    public void addDemoTrack() {
-        Track track = new Track("User track", "Artist");
-        tracks.add(track);
-
-        // Notify list for changes
-        voteListAdapter.notifyDataSetChanged();
-        checkEmptyState();
-
-        Toast.makeText(getApplicationContext(), "Added demo Track", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -86,6 +73,26 @@ public class RoomPlaylistActivity extends Activity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        //Track track  = mAdapter.getItem(position);
+    }
+
+    public void checkEmptyState() {
+        mListView.setVisibility((mListView.getCount() == 0) ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    public void addDemoTrack() {
+        Track track = new Track("User track", "Artist");
+        tracks.add(track);
+
+        // Notify list for changes
+        mAdapter.notifyDataSetChanged();
+        checkEmptyState();
+
+        Toast.makeText(getApplicationContext(), "Added demo Track", Toast.LENGTH_SHORT).show();
     }
 
 }

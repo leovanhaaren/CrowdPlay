@@ -37,7 +37,7 @@
                 android:layout_marginLeft="55dp" />
         </LinearLayout>
 
-        <ListView
+        <de.timroes.android.listview.EnhancedListView
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:id="@+id/listView"

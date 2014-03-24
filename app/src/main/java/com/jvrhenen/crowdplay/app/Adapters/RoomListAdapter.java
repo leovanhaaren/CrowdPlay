@@ -19,23 +19,33 @@ import java.util.ArrayList;
 public class RoomListAdapter extends BaseAdapter {
 
     private Context         context;
-    private ArrayList<Room> rooms;
+    private ArrayList<Room> items;
     private LayoutInflater  inflater;
 
     public RoomListAdapter(Context c, ArrayList<Room> e) {
         inflater = LayoutInflater.from(c);
         context  = c;
-        rooms    = e;
+        items = e;
+    }
+
+    public void remove(int position) {
+        items.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void insert(int position, Room item) {
+        items.add(position, item);
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return rooms.size();
+        return items.size();
     }
 
     @Override
     public Room getItem(int position) {
-        return rooms.get(position);
+        return items.get(position);
     }
 
     @Override
@@ -63,8 +73,8 @@ public class RoomListAdapter extends BaseAdapter {
         Room room = getItem(position);
 
         name.setText(room.getName());
-        if(room.getTracks() != null)
-            queue.setText(room.getTracks().size() + " items in queue");
+        if(room.getPlaylist() != null)
+            queue.setText(room.getPlaylist().size() + " items in queue");
         else
             queue.setText("No items in queue");
         //track.setText(room.getCurrentTrack());

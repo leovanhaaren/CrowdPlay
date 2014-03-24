@@ -19,23 +19,33 @@ import java.util.ArrayList;
 public class PlayListAdapter extends BaseAdapter {
 
     private Context          context;
-    private ArrayList<Track> tracks;
+    private ArrayList<Track> items;
     private LayoutInflater   inflater;
 
     public PlayListAdapter(Context c, ArrayList<Track> e) {
         inflater = LayoutInflater.from(c);
         context  = c;
-        tracks   = e;
+        items = e;
+    }
+
+    public void remove(int position) {
+        items.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void insert(int position, Track item) {
+        items.add(position, item);
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return tracks.size();
+        return items.size();
     }
 
     @Override
     public Track getItem(int position) {
-        return tracks.get(position);
+        return items.get(position);
     }
 
     @Override

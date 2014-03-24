@@ -23,6 +23,8 @@
     <string name="room_play_dialog_field">name</string>
     <string name="room_play_dialog_cancel">Cancel</string>
     <string name="room_play_dialog_ok">Save</string>
+    <string name="room_play_dialog_succes">Room name changed</string>
+    <string name="room_play_dialog_field_empty">Please enter a name</string>
     <string name="room_play_emptystate_title">Playlist is empty</string>
     <string name="room_play_emptystate_text">Add a local track or ask collaborators to add their tracks</string>
 

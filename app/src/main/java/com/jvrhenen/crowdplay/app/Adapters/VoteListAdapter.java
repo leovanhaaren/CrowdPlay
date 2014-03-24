@@ -19,23 +19,33 @@ import java.util.ArrayList;
 public class VoteListAdapter extends BaseAdapter {
 
     private Context          context;
-    private ArrayList<Track> tracks;
+    private ArrayList<Track> items;
     private LayoutInflater   inflater;
 
     public VoteListAdapter(Context c, ArrayList<Track> e) {
         inflater = LayoutInflater.from(c);
         context  = c;
-        tracks   = e;
+        items = e;
+    }
+
+    public void remove(int position) {
+        items.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void insert(int position, Track item) {
+        items.add(position, item);
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return tracks.size();
+        return items.size();
     }
 
     @Override
     public Track getItem(int position) {
-        return tracks.get(position);
+        return items.get(position);
     }
 
     @Override
@@ -48,7 +58,7 @@ public class VoteListAdapter extends BaseAdapter {
         View v = convertView;
 
         if(v == null) {
-            v = inflater.inflate(R.layout.vote_list_item_old, parent, false);
+            v = inflater.inflate(R.layout.vote_list_item, parent, false);
             v.setTag(R.id.playlist_list_item_title,  v.findViewById(R.id.playlist_list_item_title));
             v.setTag(R.id.playlist_list_item_artist, v.findViewById(R.id.playlist_list_item_artist));
             v.setTag(R.id.playlist_list_item_art,    v.findViewById(R.id.playlist_list_item_art));

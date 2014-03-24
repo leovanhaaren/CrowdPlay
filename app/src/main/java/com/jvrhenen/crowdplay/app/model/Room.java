@@ -29,7 +29,7 @@ public class Room {
     private Track currentTrack;
 
     @ForeignCollectionField
-    private ForeignCollection<Track> tracks;
+    private ForeignCollection<Track> playlist;
 
     public Room() {
         // ORMLite needs a no-arg constructor
@@ -69,12 +69,12 @@ public class Room {
         this.date = date;
     }
 
-    public ForeignCollection<Track> getTracks() {
-        return tracks;
+    public ForeignCollection<Track> getPlaylist() {
+        return playlist;
     }
 
     public void addTrack(Track track) {
-        tracks.add(track);
+        playlist.add(track);
     }
 
     public Track getCurrentTrack() {

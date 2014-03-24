@@ -60,13 +60,13 @@
         <ImageButton
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:id="@+id/imageButton"
+            android:id="@+id/voteButton"
             android:layout_alignWithParentIfMissing="false"
             android:layout_alignTop="@+id/vertical_divider"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:src="@drawable/ic_action_good"
-            android:style="?android:attr/borderlessButtonStyle"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_marginBottom="2dp" />
 
     </RelativeLayout>
