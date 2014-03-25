@@ -2,17 +2,23 @@ package com.jvrhenen.crowdplay.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.jvrhenen.crowdplay.app.MusicService.MusicBinder;
 import com.jvrhenen.crowdplay.app.adapters.PlayListAdapter;
 import com.jvrhenen.crowdplay.app.data.RoomsRepository;
 import com.jvrhenen.crowdplay.app.model.Room;
@@ -24,7 +30,7 @@ import de.timroes.android.listview.EnhancedListView;
 import de.timroes.android.listview.EnhancedListView.OnDismissCallback;
 
 
-public class RoomPlayActivity extends Activity {
+public class RoomPlayActivity extends Activity implements AdapterView.OnItemClickListener {
 
     private static final String TAG = "RoomPlayActivity";
 
@@ -36,6 +42,11 @@ public class RoomPlayActivity extends Activity {
 
     private int roomId;
     private Room room;
+
+    private MusicService musicService;
+    private Intent       playIntent;
+
+    private boolean musicBound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +62,10 @@ public class RoomPlayActivity extends Activity {
         playlist = new ArrayList<Track>(room.getPlaylist());
 
         mListView = (EnhancedListView)findViewById(R.id.listView);
-        mAdapter = new PlayListAdapter(this, playlist);
+        mAdapter  = new PlayListAdapter(this, playlist);
         mListView.setAdapter(mAdapter);
+
+        mListView.setOnItemClickListener(this);
 
         // Set the callback that handles dismisses.
         mListView.setDismissCallback(new OnDismissCallback() {
@@ -77,13 +90,56 @@ public class RoomPlayActivity extends Activity {
         });
         mListView.enableSwipeToDismiss();
         mListView.setUndoStyle(EnhancedListView.UndoStyle.COLLAPSED_POPUP);
-        mListView.setUndoHideDelay(3000);
 
         // Display the room's name as title for the activity
         getActionBar().setTitle(room.getName());
 
         // Check if we have any results
         checkEmptyState();
+    }
+
+    private ServiceConnection musicConnection = new ServiceConnection(){
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MusicBinder binder = (MusicBinder)service;
+
+            musicService = binder.getService();
+
+            musicService.setPlayList(playlist);
+            musicBound = true;
+
+            Log.i(TAG, "Connected service : MusicService");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            musicBound = false;
+        }
+    };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(playIntent == null){
+            playIntent = new Intent(this, MusicService.class);
+            bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
+            startService(playIntent);
+
+            Log.i(TAG, "Started service : MusicService");
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        Track track = mAdapter.getItem(position);
+        if(musicService != null && track != null) {
+            musicService.setTrack(track);
+            musicService.playSong();
+
+            Log.i(TAG, "Song send");
+        }
     }
 
     @Override
@@ -102,6 +158,13 @@ public class RoomPlayActivity extends Activity {
         Log.i(TAG, "Activity Life Cycle : onResume : Activity Resumed");
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        stopService(playIntent);
+        musicService = null;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

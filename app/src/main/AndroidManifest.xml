@@ -39,6 +39,10 @@
             android:label="@string/music_overview_title"
             android:parentActivityName=".RoomPlaylistActivity">
         </activity>
+
+        <service android:name="com.jvrhenen.crowdplay.app.MusicService" />
     </application>
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 </manifest>

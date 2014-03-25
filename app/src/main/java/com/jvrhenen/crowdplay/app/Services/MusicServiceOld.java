@@ -13,11 +13,11 @@ import java.io.IOException;
 /**
  * Created by jvrhenen on 18-03-14.
  */
-public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener {
+public class MusicServiceOld extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener {
 
     private static final String ACTION_PLAY = "PLAY";
     private static String mUrl;
-    private static MusicService mInstance = null;
+    private static MusicServiceOld mInstance = null;
 
     private MediaPlayer mMediaPlayer = null;    // The Media Player
     private int mBufferPosition;
@@ -159,7 +159,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         // Seek music to pos
     }
 
-    public static MusicService getInstance() {
+    public static MusicServiceOld getInstance() {
         return mInstance;
     }
 
