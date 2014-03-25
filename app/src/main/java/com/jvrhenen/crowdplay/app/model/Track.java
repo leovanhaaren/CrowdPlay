@@ -16,10 +16,10 @@ public class Track {
     private long trackId;
 
     @DatabaseField
-    private String artist;
+    private String title;
 
     @DatabaseField
-    private String title;
+    private String artist;
 
     @DatabaseField
     private String album;
@@ -39,8 +39,24 @@ public class Track {
         this.artist = artist;
     }
 
+    public Track(long id, String title, String artist, String album, long duration){
+        this.trackId  = id;
+        this.title    = title;
+        this.artist   = artist;
+        this.album    = album;
+        this.duration = duration;
+    }
+
     public int getId() {
         return id;
+    }
+
+    public long getTrackId() {
+        return trackId;
+    }
+
+    public void setTrackId(long trackId) {
+        this.trackId = trackId;
     }
 
     public String getTitle() {
@@ -57,6 +73,22 @@ public class Track {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 
     public Room getRoom() {

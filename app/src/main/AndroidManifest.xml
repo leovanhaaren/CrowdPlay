@@ -20,12 +20,24 @@
             android:name=".RoomPlayActivity"
             android:label="@string/room_play_title"
             android:theme="@style/Theme.Transparent"
+            android:launchMode="singleTop"
             android:parentActivityName=".RoomOverviewActivity">
         </activity>
         <activity
             android:name=".RoomPlaylistActivity"
-            android:label="@string/room_play_title"
+            android:label="@string/room_playlist_title"
+            android:launchMode="singleTop"
             android:parentActivityName=".RoomOverviewActivity">
+        </activity>
+        <activity
+            android:name=".HostMusicOverviewActivity"
+            android:label="@string/music_overview_title"
+            android:parentActivityName=".RoomPlayActivity">
+        </activity>
+        <activity
+            android:name=".ContributorMusicOverviewActivity"
+            android:label="@string/music_overview_title"
+            android:parentActivityName=".RoomPlaylistActivity">
         </activity>
     </application>
 

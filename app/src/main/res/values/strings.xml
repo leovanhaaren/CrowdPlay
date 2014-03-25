@@ -28,7 +28,12 @@
     <string name="room_play_emptystate_title">Playlist is empty</string>
     <string name="room_play_emptystate_text">Add a local track or ask collaborators to add their tracks</string>
 
+    <string name="room_playlist_title">Room Playlist</string>
     <string name="room_playlist_emptystate_title">Playlist is empty</string>
     <string name="room_playlist_emptystate_text">To add a track, press the icon in the menu</string>
+
+    <string name="music_overview_title">Music on device</string>
+    <string name="music_overview_emptystate_title">No music found</string>
+    <string name="music_overview_emptystate_text">Please add tracks to your device</string>
 
 </resources>

@@ -18,9 +18,9 @@
             android:layout_height="48dp"
             android:id="@+id/art"
             android:scaleType="center"
+            android:background="#ccc"
             android:layout_marginBottom="2dp"
-            android:src="@drawable/ic_action_help"
-            android:background="#ccc" />
+            android:src="@drawable/ic_action_help" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,21 +54,18 @@
             android:layout_width="1dp"
             android:background="#ccc"
             android:layout_centerVertical="true"
-            android:layout_alignLeft="@+id/voteButton"
-            android:layout_alignStart="@+id/voteButton" />
+            android:layout_alignLeft="@+id/votes"
+            android:layout_alignStart="@+id/votes" />
 
-        <ImageButton
+        <TextView
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:id="@+id/voteButton"
-            android:layout_alignWithParentIfMissing="false"
-            android:layout_alignTop="@+id/vertical_divider"
+            android:text="0"
+            android:id="@+id/votes"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_action_good"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_marginBottom="2dp" />
-
+            android:gravity="center"
+            android:textAppearance="@style/PlayListItem.Vote" />
     </RelativeLayout>
 
 </RelativeLayout>

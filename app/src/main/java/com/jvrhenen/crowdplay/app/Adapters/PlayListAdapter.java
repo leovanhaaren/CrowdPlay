@@ -38,6 +38,11 @@ public class PlayListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void replaceList(ArrayList<Track> items) {
+        items = items;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return items.size();
@@ -58,15 +63,15 @@ public class PlayListAdapter extends BaseAdapter {
         View v = convertView;
 
         if(v == null) {
-            v = inflater.inflate(R.layout.playlist_list_item, parent, false);
-            v.setTag(R.id.playlist_list_item_title,  v.findViewById(R.id.playlist_list_item_title));
-            v.setTag(R.id.playlist_list_item_artist, v.findViewById(R.id.playlist_list_item_artist));
-            v.setTag(R.id.playlist_list_item_art,    v.findViewById(R.id.playlist_list_item_art));
+            v = inflater.inflate(R.layout.playlist_list_item_votes, parent, false);
+            v.setTag(R.id.title,  v.findViewById(R.id.title));
+            v.setTag(R.id.artist, v.findViewById(R.id.artist));
+            v.setTag(R.id.art,    v.findViewById(R.id.art));
         }
 
-        TextView  title  = (TextView) v.getTag(R.id.playlist_list_item_title);
-        TextView  artist = (TextView) v.getTag(R.id.playlist_list_item_artist);
-        ImageView art    = (ImageView)v.getTag(R.id.playlist_list_item_art);
+        TextView  title  = (TextView) v.getTag(R.id.title);
+        TextView  artist = (TextView) v.getTag(R.id.artist);
+        ImageView art    = (ImageView)v.getTag(R.id.art);
 
         Track track = getItem(position);
 

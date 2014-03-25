@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
 import com.jvrhenen.crowdplay.app.adapters.RoomListAdapter;
@@ -26,7 +25,9 @@ import de.timroes.android.listview.EnhancedListView;
 import de.timroes.android.listview.EnhancedListView.OnDismissCallback;
 
 
-public class RoomOverviewActivity extends ActionBarActivity implements OnItemClickListener {
+public class RoomOverviewActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
+
+    private static final String TAG = "RoomOverviewActivity";
 
     private ArrayList<Room> rooms;
     private RoomsRepository roomsRepository;
@@ -120,9 +121,9 @@ public class RoomOverviewActivity extends ActionBarActivity implements OnItemCli
     }
 
     public void openRoom(Room room) {
-        Intent roomPlay = new Intent(this, RoomPlayActivity.class);
-        roomPlay.putExtra("roomId", room.getId());
-        startActivity(roomPlay);
+        Intent intent = new Intent(this, RoomPlayActivity.class);
+        intent.putExtra("roomId", room.getId());
+        startActivity(intent);
         this.overridePendingTransition(R.anim.animation_sub_enter, R.anim.animation_main_leave);
     }
 

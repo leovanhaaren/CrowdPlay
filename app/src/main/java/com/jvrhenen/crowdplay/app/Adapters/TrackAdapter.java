@@ -10,19 +10,20 @@ import android.widget.TextView;
 
 import com.jvrhenen.crowdplay.app.R;
 import com.jvrhenen.crowdplay.app.model.Track;
+import com.jvrhenen.crowdplay.app.utils.Convert;
 
 import java.util.ArrayList;
 
 /**
  * Created by Leo on 17/03/14.
  */
-public class VoteListAdapter extends BaseAdapter {
+public class TrackAdapter extends BaseAdapter {
 
     private Context          context;
     private ArrayList<Track> items;
     private LayoutInflater   inflater;
 
-    public VoteListAdapter(Context c, ArrayList<Track> e) {
+    public TrackAdapter(Context c, ArrayList<Track> e) {
         inflater = LayoutInflater.from(c);
         context  = c;
         items = e;
@@ -63,20 +64,23 @@ public class VoteListAdapter extends BaseAdapter {
         View v = convertView;
 
         if(v == null) {
-            v = inflater.inflate(R.layout.vote_list_item, parent, false);
-            v.setTag(R.id.title,  v.findViewById(R.id.title));
-            v.setTag(R.id.artist, v.findViewById(R.id.artist));
-            v.setTag(R.id.art,    v.findViewById(R.id.art));
+            v = inflater.inflate(R.layout.track_list_item, parent, false);
+            v.setTag(R.id.title,    v.findViewById(R.id.title));
+            v.setTag(R.id.artist,   v.findViewById(R.id.artist));
+            v.setTag(R.id.duration, v.findViewById(R.id.duration));
+            v.setTag(R.id.art,      v.findViewById(R.id.art));
         }
 
-        TextView  title  = (TextView) v.getTag(R.id.title);
-        TextView  artist = (TextView) v.getTag(R.id.artist);
-        ImageView art    = (ImageView)v.getTag(R.id.art);
+        TextView  title    = (TextView) v.getTag(R.id.title);
+        TextView  artist   = (TextView) v.getTag(R.id.artist);
+        TextView  duration = (TextView) v.getTag(R.id.duration);
+        ImageView art      = (ImageView)v.getTag(R.id.art);
 
         Track track = getItem(position);
 
         title.setText(track.getTitle());
         artist.setText(track.getArtist());
+        duration.setText(Convert.getDurationBreakdown(track.getDuration()));
 
         // Set album art
         // TODO: FIX ALBUM ARTWORK

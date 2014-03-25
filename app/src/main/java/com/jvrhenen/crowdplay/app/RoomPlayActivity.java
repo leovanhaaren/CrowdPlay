@@ -3,8 +3,10 @@ package com.jvrhenen.crowdplay.app;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +25,8 @@ import de.timroes.android.listview.EnhancedListView.OnDismissCallback;
 
 
 public class RoomPlayActivity extends Activity {
+
+    private static final String TAG = "RoomPlayActivity";
 
     private ArrayList<Track> playlist;
     private RoomsRepository  roomsRepository;
@@ -83,6 +87,23 @@ public class RoomPlayActivity extends Activity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        // Refresh listview, in case we added a track
+        playlist = new ArrayList<Track>(room.getPlaylist());
+        mAdapter = new PlayListAdapter(this, playlist);
+        mListView.setAdapter(mAdapter);
+        mListView.invalidate();
+
+        // Check if we have any results
+        checkEmptyState();
+
+        Log.i(TAG, "Activity Life Cycle : onResume : Activity Resumed");
+    }
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.room_play, menu);
         return true;
@@ -93,8 +114,8 @@ public class RoomPlayActivity extends Activity {
         switch (item.getItemId()) {
             case R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
-                this.overridePendingTransition(R.anim.animation_main_enter, R.anim.animation_sub_leave);
 
+                this.overridePendingTransition(R.anim.animation_main_enter, R.anim.animation_sub_leave);
                 return true;
             case R.id.room_play_action_edit:
                 showEditDialog();
@@ -108,15 +129,12 @@ public class RoomPlayActivity extends Activity {
         mListView.setVisibility((mListView.getCount() == 0) ? View.INVISIBLE : View.VISIBLE);
     }
 
-    public void addDemoTrack(View view) {
-        Track track = new Track("Test track", "Artist");
-        playlist.add(track);
+    public void addMusic(View view) {
+        Intent intent = new Intent(this, ContributorMusicOverviewActivity.class);
+        intent.putExtra("roomId", roomId);
+        startActivityForResult(intent, 1);
 
-        // Notify list for changes
-        mAdapter.notifyDataSetChanged();
-        checkEmptyState();
-
-        Toast.makeText(getApplicationContext(), "Added demo Track", Toast.LENGTH_SHORT).show();
+        this.overridePendingTransition(R.anim.animation_sub_enter, R.anim.animation_main_leave);
     }
 
     public void showEditDialog() {

@@ -38,6 +38,11 @@ public class RoomListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void replaceList(ArrayList<Room> items) {
+        items = items;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return items.size();
