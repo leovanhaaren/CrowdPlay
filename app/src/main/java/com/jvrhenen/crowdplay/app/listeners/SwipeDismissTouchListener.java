@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.jvrhenen.crowdplay.app.listener;
+package com.jvrhenen.crowdplay.app.listeners;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

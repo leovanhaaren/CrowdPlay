@@ -24,29 +24,31 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
+            android:layout_height="wrap_content"
             android:id="@+id/title"
             android:text="Title"
             android:textAppearance="@style/PlayListItem.Track"
             android:layout_alignTop="@+id/art"
             android:layout_toRightOf="@+id/art"
             android:layout_marginLeft="8dp"
-            android:gravity="center_vertical"
             android:layout_toLeftOf="@+id/vertical_divider"
-            android:layout_marginRight="8dp" />
+            android:layout_marginRight="8dp"
+            android:singleLine="true"
+            android:layout_marginTop="4dp" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
+            android:layout_height="wrap_content"
             android:id="@+id/artist"
             android:text="Artist"
-            android:textAppearance="@style/PlayListItem.Album"
+            android:textAppearance="@style/PlayListItem.Artist"
             android:layout_below="@+id/title"
             android:layout_toRightOf="@+id/art"
             android:layout_marginLeft="8dp"
-            android:gravity="center_vertical"
             android:layout_alignRight="@+id/title"
-            android:layout_alignEnd="@+id/title" />
+            android:layout_alignEnd="@+id/title"
+            android:singleLine="true"
+            android:layout_marginTop="2dp" />
 
         <View
             android:id="@+id/vertical_divider"

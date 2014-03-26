@@ -33,14 +33,19 @@
             </FrameLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Artist - Track title"
-                android:id="@+id/duration"
+                android:id="@+id/currentTitle"
                 android:gravity="center"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
                 android:layout_gravity="center_horizontal|bottom"
                 android:layout_marginBottom="10dp"
-                android:textAppearance="@style/Player.Track" />
+                android:textAppearance="@style/Player.Track"
+                android:singleLine="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" />
 
             <FrameLayout
                 android:layout_width="fill_parent"
@@ -82,21 +87,22 @@
                 <ImageButton
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:id="@+id/imageButton"
+                    android:id="@+id/prevButton"
                     style="?android:attr/borderlessButtonStyle"
-                    android:src="@drawable/ic_action_previous" />
+                    android:src="@drawable/ic_action_previous"
+                    android:clickable="false" />
 
                 <ImageButton
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:id="@+id/imageButton2"
+                    android:id="@+id/playButton"
                     android:src="@drawable/ic_action_play"
                     style="?android:attr/borderlessButtonStyle" />
 
                 <ImageButton
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:id="@+id/imageButton3"
+                    android:id="@+id/nextButton"
                     style="?android:attr/borderlessButtonStyle"
                     android:src="@drawable/ic_action_next" />
             </LinearLayout>
@@ -105,7 +111,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:text="0:00"
-                android:id="@+id/duration"
+                android:id="@+id/totalTime"
                 android:gravity="center"
                 android:layout_alignLeft="@+id/linearLayout"
                 android:layout_alignStart="@+id/linearLayout"

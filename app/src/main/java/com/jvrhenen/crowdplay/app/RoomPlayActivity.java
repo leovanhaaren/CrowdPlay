@@ -8,14 +8,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jvrhenen.crowdplay.app.MusicService.MusicBinder;
@@ -23,6 +28,7 @@ import com.jvrhenen.crowdplay.app.adapters.PlayListAdapter;
 import com.jvrhenen.crowdplay.app.data.RoomsRepository;
 import com.jvrhenen.crowdplay.app.model.Room;
 import com.jvrhenen.crowdplay.app.model.Track;
+import com.jvrhenen.crowdplay.app.utils.Util;
 
 import java.util.ArrayList;
 
@@ -30,7 +36,7 @@ import de.timroes.android.listview.EnhancedListView;
 import de.timroes.android.listview.EnhancedListView.OnDismissCallback;
 
 
-public class RoomPlayActivity extends Activity implements AdapterView.OnItemClickListener {
+public class RoomPlayActivity extends Activity implements AdapterView.OnItemClickListener, SeekBar.OnSeekBarChangeListener {
 
     private static final String TAG = "RoomPlayActivity";
 
@@ -48,6 +54,18 @@ public class RoomPlayActivity extends Activity implements AdapterView.OnItemClic
 
     private boolean musicBound = false;
 
+    private Handler  mHandler = new Handler();
+
+    private TextView currentTitle;
+    private TextView currentTime;
+    private TextView totalTime;
+
+    private SeekBar  seekBar;
+
+    private ImageButton prevButton;
+    private ImageButton playButton;
+    private ImageButton nextButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,11 +79,22 @@ public class RoomPlayActivity extends Activity implements AdapterView.OnItemClic
         room     = roomsRepository.getRoom(roomId);
         playlist = new ArrayList<Track>(room.getPlaylist());
 
+        currentTitle = (TextView)findViewById(R.id.currentTitle);
+        currentTime  = (TextView)findViewById(R.id.currentTime);
+        totalTime    = (TextView)findViewById(R.id.totalTime);
+
+        seekBar      = (SeekBar)findViewById(R.id.seekBar);
+
+        prevButton   = (ImageButton)findViewById(R.id.prevButton);
+        playButton   = (ImageButton)findViewById(R.id.playButton);
+        nextButton   = (ImageButton)findViewById(R.id.nextButton);
+
         mListView = (EnhancedListView)findViewById(R.id.listView);
         mAdapter  = new PlayListAdapter(this, playlist);
         mListView.setAdapter(mAdapter);
 
         mListView.setOnItemClickListener(this);
+        seekBar.setOnSeekBarChangeListener(this);
 
         // Set the callback that handles dismisses.
         mListView.setDismissCallback(new OnDismissCallback() {
@@ -96,6 +125,31 @@ public class RoomPlayActivity extends Activity implements AdapterView.OnItemClic
 
         // Check if we have any results
         checkEmptyState();
+
+        playButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                // check for already playing
+                if(musicService.getPlayer().isPlaying()){
+                    if(musicService.getPlayer() != null){
+                        musicService.getPlayer().pause();
+
+                        currentTitle.setSelected(false);
+                        playButton.setImageResource(R.drawable.ic_action_play);
+                    }
+                }else{
+                    // Resume song
+                    if(musicService.getPlayer() != null){
+                        musicService.getPlayer().start();
+
+                        currentTitle.setSelected(true);
+                        playButton.setImageResource(R.drawable.ic_action_pause);
+                    }
+                }
+
+            }
+        });
     }
 
     private ServiceConnection musicConnection = new ServiceConnection(){
@@ -108,8 +162,6 @@ public class RoomPlayActivity extends Activity implements AdapterView.OnItemClic
 
             musicService.setPlayList(playlist);
             musicBound = true;
-
-            Log.i(TAG, "Connected service : MusicService");
         }
 
         @Override
@@ -126,8 +178,6 @@ public class RoomPlayActivity extends Activity implements AdapterView.OnItemClic
             playIntent = new Intent(this, MusicService.class);
             bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
             startService(playIntent);
-
-            Log.i(TAG, "Started service : MusicService");
         }
     }
 
@@ -138,8 +188,72 @@ public class RoomPlayActivity extends Activity implements AdapterView.OnItemClic
             musicService.setTrack(track);
             musicService.playSong();
 
-            Log.i(TAG, "Song send");
+            currentTitle.setSelected(true);
+            playButton.setImageResource(R.drawable.ic_action_pause);
         }
+
+        // set Progress bar values
+        seekBar.setProgress(0);
+        seekBar.setMax(100);
+
+        currentTitle.setText(track.getTitle());
+
+        // Updating progress bar
+        updateProgressBar();
+    }
+
+    public void updateProgressBar() {
+        mHandler.postDelayed(mUpdateTimeTask, 100);
+    }
+
+    private Runnable mUpdateTimeTask = new Runnable() {
+        public void run() {
+            long totalDuration   = musicService.getPlayer().getDuration();
+            long currentDuration = musicService.getPlayer().getCurrentPosition();
+
+            // Displaying Total Duration time
+            totalTime.setText("" + Util.milliSecondsToTimer(totalDuration));
+            // Displaying time completed playing
+            currentTime.setText("" + Util.milliSecondsToTimer(currentDuration));
+
+            // Updating progress bar
+            int progress = (int)(Util.getProgressPercentage(currentDuration, totalDuration));
+            //Log.d("Progress", ""+progress);
+            seekBar.setProgress(progress);
+
+            // Running this thread after 100 milliseconds
+            mHandler.postDelayed(this, 100);
+        }
+    };
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch) {
+
+    }
+
+    /**
+     * When user starts moving the progress handler
+     * */
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        // remove message Handler from updating progress bar
+        mHandler.removeCallbacks(mUpdateTimeTask);
+    }
+
+    /**
+     * When user stops moving the progress hanlder
+     * */
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        mHandler.removeCallbacks(mUpdateTimeTask);
+        int totalDuration   = musicService.getPlayer().getDuration();
+        int currentPosition = Util.progressToTimer(seekBar.getProgress(), totalDuration);
+
+        // forward or backward to certain seconds
+        musicService.getPlayer().seekTo(currentPosition);
+
+        // update timer progress again
+        updateProgressBar();
     }
 
     @Override

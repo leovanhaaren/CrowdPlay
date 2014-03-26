@@ -40,9 +40,10 @@
             android:parentActivityName=".RoomPlaylistActivity">
         </activity>
 
-        <service android:name="com.jvrhenen.crowdplay.app.MusicService" />
+        <service android:name=".MusicService" />
     </application>
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

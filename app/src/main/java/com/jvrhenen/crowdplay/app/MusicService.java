@@ -99,6 +99,14 @@ public class MusicService extends Service implements
         currentTrack = track;
     }
 
+    public MediaPlayer getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(MediaPlayer player) {
+        this.player = player;
+    }
+
     @Override
     public void onCompletion(MediaPlayer mp) {
         // TODO Auto-generated method stub
