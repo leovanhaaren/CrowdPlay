@@ -19,10 +19,6 @@
 
         <service android:name="com.crowdplay.app.MusicService" />
 
-        <activity
-            android:name="com.crowdplay.app.SettingsActivity"
-            android:label="@string/title_activity_settings" >
-        </activity>
     </application>
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />

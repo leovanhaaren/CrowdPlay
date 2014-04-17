@@ -2,7 +2,10 @@ package com.crowdplay.app;
 
 import android.app.Fragment;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,6 +24,8 @@ import com.crowdplay.app.data.TracksRepository;
 import com.crowdplay.app.model.Room;
 import com.crowdplay.app.model.Track;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -133,24 +138,21 @@ public class MusicOverviewFragment extends Fragment implements AdapterView.OnIte
                 long duration = musicCursor.getLong(durationColumn);
                 long albumId  = musicCursor.getLong(albumIdColumn);
 
-                /*Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
-                Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
+                Uri sArtworkUri     = Uri.parse("content://media/external/audio/albumart");
+                Uri uri             = ContentUris.withAppendedId(sArtworkUri, albumId);
 
-                Bitmap bitmap = null;
+                ContentResolver res = getActivity().getContentResolver();
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), albumArtUri);
-                    bitmap = Bitmap.createScaledBitmap(bitmap, 32, 32, true);
+                    InputStream in      = res.openInputStream(uri);
+                    Bitmap artwork      = BitmapFactory.decodeStream(in);
 
-                } catch (FileNotFoundException exception) {
-                    exception.printStackTrace();
-                    bitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.art);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
+                    Track track = new Track(id, title, artist, album, albumId, duration);
+                    track.setBitmap(artwork);
 
-                Track track = new Track(id, title, artist, album, duration);
-                //track.setBitmap(bitmap);
-                tracks.add(track);
+                    tracks.add(track);
+                } catch(FileNotFoundException e) {
+                    Log.v(TAG, e.toString());
+                }
             }
             while (musicCursor.moveToNext());
         }

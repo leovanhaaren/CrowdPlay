@@ -130,8 +130,8 @@ public class HostMusicOverviewActivity extends Activity implements AdapterView.O
                 String album  = musicCursor.getString(albumColumn);
                 long duration = musicCursor.getLong(durationColumn);
 
-                Track track = new Track(id, title, artist, album, duration);
-                tracks.add(track);
+                //Track track = new Track(id, title, artist, album, duration);
+                //tracks.add(track);
             }
             while (musicCursor.moveToNext());
         }

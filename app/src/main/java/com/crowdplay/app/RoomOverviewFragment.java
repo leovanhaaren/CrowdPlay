@@ -96,7 +96,7 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.room_play, menu);
+        inflater.inflate(R.menu.room_overview, menu);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
                 Toast.makeText(getActivity(), R.string.room_overview_action_refresh_message, Toast.LENGTH_SHORT).show();
 
                 menuItem = item;
-                menuItem.setActionView(R.layout.progressbar);
+                menuItem.setActionView(R.layout.room_search_layout);
                 menuItem.expandActionView();
                 TestTask task = new TestTask();
                 task.execute("test");
@@ -145,31 +145,30 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
     }*/
 
     public void showDialog() {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final View dialoglayout       = inflater.inflate(R.layout.dialog_layout, (ViewGroup) getActivity().getCurrentFocus());
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
         builder.setTitle(R.string.room_overview_dialog_title);
-
-        // Make a custom text field
-        final EditText name = new EditText(getActivity());
-        name.setHint(R.string.room_overview_dialog_field);
-        name.setSingleLine();
-        builder.setView(name);
-
+        builder.setView(dialoglayout);
         builder.setPositiveButton(R.string.room_overview_dialog_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                String roomName  = name.getText().toString();
+                EditText name   = (EditText) dialoglayout.findViewById(R.id.name);
+                String roomName = name.getText().toString();
 
                 if(roomName.length() == 0) {
                     Toast.makeText(getActivity(), R.string.room_overview_dialog_field_empty, Toast.LENGTH_SHORT).show();
-                    return;
+
+                } else {
+                    // Get android id to indentify room owner
+                    String androidId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+
+                    Room room = new Room(roomName, androidId);
+                    roomsRepository.save(room);
+
+                    //openRoom(room);
                 }
-
-                // Get android id to indentify room owner
-                String androidId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-
-                Room room = new Room(roomName, androidId);
-                roomsRepository.save(room);
-
-                //openRoom(room);
             }
         });
         builder.setNegativeButton(R.string.room_overview_dialog_cancel, new DialogInterface.OnClickListener() {

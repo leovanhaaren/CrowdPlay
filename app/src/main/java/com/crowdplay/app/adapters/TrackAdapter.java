@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.crowdplay.app.R;
 import com.crowdplay.app.model.Track;
-import com.crowdplay.app.utils.Convert;
 
 import java.util.ArrayList;
 
@@ -67,20 +66,20 @@ public class TrackAdapter extends BaseAdapter {
             v = inflater.inflate(R.layout.track_list_item, parent, false);
             v.setTag(R.id.title,    v.findViewById(R.id.title));
             v.setTag(R.id.artist,   v.findViewById(R.id.artist));
-            v.setTag(R.id.duration, v.findViewById(R.id.duration));
+            //v.setTag(R.id.duration, v.findViewById(R.id.duration));
             v.setTag(R.id.art,      v.findViewById(R.id.art));
         }
 
         TextView  title    = (TextView) v.getTag(R.id.title);
         TextView  artist   = (TextView) v.getTag(R.id.artist);
-        TextView  duration = (TextView) v.getTag(R.id.duration);
+        //TextView  duration = (TextView) v.getTag(R.id.duration);
         ImageView art      = (ImageView)v.getTag(R.id.art);
 
         Track track = getItem(position);
 
         title.setText(track.getTitle());
         artist.setText(track.getArtist());
-        duration.setText(Convert.getDurationBreakdown(track.getDuration()));
+        //duration.setText(Convert.getDurationBreakdown(track.getDuration()));
 
         // Set album art
         if(track.getBitmap() != null)

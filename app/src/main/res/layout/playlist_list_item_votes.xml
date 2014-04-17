@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/title"
             android:text="Title"
-            android:textAppearance="@style/PlayListItem.Track"
+            android:textAppearance="@style/PlayListItem.Title"
             android:layout_alignTop="@+id/art"
             android:layout_toRightOf="@+id/art"
             android:layout_marginLeft="8dp"

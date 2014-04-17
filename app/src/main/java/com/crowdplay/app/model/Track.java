@@ -29,6 +29,9 @@ public class Track {
     private String album;
 
     @DatabaseField
+    private long albumId;
+
+    @DatabaseField
     private long duration;
 
     private Bitmap bitmap;
@@ -48,11 +51,12 @@ public class Track {
         this.artist = artist;
     }
 
-    public Track(long id, String title, String artist, String album, long duration){
+    public Track(long id, String title, String artist, String album, long albumId, long duration){
         this.trackId  = id;
         this.title    = title;
         this.artist   = artist;
         this.album    = album;
+        this.albumId  = albumId;
         this.duration = duration;
     }
 
@@ -90,6 +94,14 @@ public class Track {
 
     public void setAlbum(String album) {
         this.album = album;
+    }
+
+    public long getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(long albumId) {
+        this.albumId = albumId;
     }
 
     public long getDuration() {

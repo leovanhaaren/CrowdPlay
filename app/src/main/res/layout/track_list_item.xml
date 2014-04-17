@@ -7,59 +7,52 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="4dp"
-        android:background="@drawable/card_bg">
+        android:layout_marginRight="32dp">
 
         <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:id="@+id/art"
-            android:scaleType="center"
+            android:scaleType="centerCrop"
             android:background="#ccc"
-            android:layout_marginBottom="2dp"
-            android:src="@drawable/ic_action_help" />
+            android:src="@drawable/ic_action_help"
+            android:layout_marginRight="8dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/title"
             android:text="Title"
-            android:textAppearance="@style/PlayListItem.Track"
+            android:textAppearance="@style/Track.Title"
             android:layout_alignTop="@+id/art"
             android:layout_toRightOf="@+id/art"
-            android:layout_marginLeft="8dp"
             android:singleLine="true"
-            android:layout_toLeftOf="@+id/duration"
-            android:layout_marginTop="4dp" />
+            android:layout_weight="1"
+            android:layout_marginTop="8dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/artist"
             android:text="Artist"
-            android:textAppearance="@style/PlayListItem.Artist"
+            android:textAppearance="@style/Track.Artist"
             android:layout_below="@+id/title"
             android:layout_toRightOf="@+id/art"
-            android:layout_marginLeft="8dp"
             android:layout_alignRight="@+id/title"
             android:layout_alignEnd="@+id/title"
             android:singleLine="true"
-            android:layout_marginTop="2dp" />
+            android:layout_weight="1"
+            android:layout_marginTop="8dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:text="0:00"
-            android:id="@+id/duration"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:gravity="center"
-            android:textAppearance="@style/PlayListItem.Duration"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" />
+        <View
+            android:id="@+id/vertical_divider"
+            android:layout_height="1dp"
+            android:layout_width="fill_parent"
+            android:background="#ccc"
+            android:layout_below="@+id/art"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
     </RelativeLayout>
 
 </RelativeLayout>
