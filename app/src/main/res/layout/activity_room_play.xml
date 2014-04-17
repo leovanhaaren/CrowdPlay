@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jvrhenen.crowdplay.app.RoomOverviewActivity"
+    tools:context="com.crowdplay.app.RoomOverviewFragment"
     android:background="@color/appBackground">
 
     <FrameLayout
@@ -35,7 +35,6 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Artist - Track title"
                 android:id="@+id/currentTitle"
                 android:gravity="center"
                 android:ellipsize="marquee"
@@ -60,9 +59,6 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="48dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/frameLayout"
             android:background="#FFF"
             android:layout_gravity="bottom"
             android:gravity="center"
@@ -74,8 +70,6 @@
                 android:text="0:00"
                 android:id="@+id/currentTime"
                 android:gravity="center"
-                android:layout_alignLeft="@+id/linearLayout"
-                android:layout_alignStart="@+id/linearLayout"
                 android:layout_weight="0.50"
                 android:textAppearance="@style/Player.Duration" />
 
@@ -87,36 +81,21 @@
                 <ImageButton
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:id="@+id/prevButton"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:src="@drawable/ic_action_previous"
-                    android:clickable="false" />
-
-                <ImageButton
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
                     android:id="@+id/playButton"
                     android:src="@drawable/ic_action_play"
-                    style="?android:attr/borderlessButtonStyle" />
-
-                <ImageButton
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:id="@+id/nextButton"
                     style="?android:attr/borderlessButtonStyle"
-                    android:src="@drawable/ic_action_next" />
+                    android:onClick="playMusic" />
+
             </LinearLayout>
 
             <TextView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:text="0:00"
                 android:id="@+id/totalTime"
                 android:gravity="center"
-                android:layout_alignLeft="@+id/linearLayout"
-                android:layout_alignStart="@+id/linearLayout"
                 android:layout_weight="0.50"
-                android:textAppearance="@style/Player.Duration" />
+                android:textAppearance="@style/Player.Duration"
+                android:text="0:00" />
 
         </LinearLayout>
 

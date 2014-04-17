@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="drawer_menu">
+        <item>@string/room_overview_title</item>
+        <item>@string/music_overview_title</item>
+        <item>@string/about_title</item>
+    </string-array>
+</resources>

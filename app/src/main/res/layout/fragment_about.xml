@@ -1,0 +1,149 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.crowdplay.app.RoomOverviewFragment"
+    android:background="@color/appBackground">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/imageView"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/icon_highres"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_version"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="@style/About.Text.Large"
+            android:id="@+id/textView"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_copyright"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="@style/About.Text.Large"
+            android:id="@+id/textView1"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_feedback"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="@style/About.Head"
+            android:id="@+id/textView2"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_feedback_text"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="@style/About.Text"
+            android:id="@+id/textView3"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="5dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_report"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="@style/About.Head"
+            android:id="@+id/textView4"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_report_text"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="@style/About.Text"
+            android:id="@+id/textView5"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="10dp" />
+
+        <View
+            android:id="@+id/horizontal_divider"
+            android:layout_height="1dp"
+            android:layout_width="fill_parent"
+            android:background="#ccc"
+            android:layout_centerVertical="true"
+            android:layout_alignLeft="@+id/votes"
+            android:layout_alignStart="@+id/votes"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_app"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="@style/About.Text.Alt"
+            android:id="@+id/textView6"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_terms"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="@style/About.Head"
+            android:id="@+id/textView7"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_privacy"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="@style/About.Head"
+            android:id="@+id/textView8"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

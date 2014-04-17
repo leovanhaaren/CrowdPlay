@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Main -->
     <string name="app_name">CrowdPlay</string>
-
+    <!-- Drawer -->
+    <string name="drawer_title">CrowdPlay</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <!-- Rooms -->
+    <string name="room_overview_title">Rooms</string>
     <string name="room_overview_action_add">Create room</string>
     <string name="room_overview_action_refresh">Refresh</string>
     <string name="room_overview_action_refresh_message">Searching for rooms</string>
@@ -14,7 +20,7 @@
     <string name="room_overview_dialog_field_empty">Please enter a name</string>
     <string name="room_overview_emptystate_title">No rooms found</string>
     <string name="room_overview_emptystate_text">To search for rooms, press icon in the menu to refresh</string>
-
+    <!-- Host -->
     <string name="room_play_title">Play</string>
     <string name="room_play_action_broadcast">Broadcast room</string>
     <string name="room_play_action_edit">Edit room</string>
@@ -27,13 +33,25 @@
     <string name="room_play_dialog_field_empty">Please enter a name</string>
     <string name="room_play_emptystate_title">Playlist is empty</string>
     <string name="room_play_emptystate_text">Add a local track or ask collaborators to add their tracks</string>
-
-    <string name="room_playlist_title">Room Playlist</string>
+    <!-- Playlist -->
+    <string name="room_playlist_title">Playlist</string>
     <string name="room_playlist_emptystate_title">Playlist is empty</string>
     <string name="room_playlist_emptystate_text">To add a track, press the icon in the menu</string>
-
-    <string name="music_overview_title">Music on device</string>
+    <!-- Music -->
+    <string name="music_overview_title">Music</string>
+    <string name="music_overview_search">Search</string>
     <string name="music_overview_emptystate_title">No music found</string>
     <string name="music_overview_emptystate_text">Please add tracks to your device</string>
+    <!-- About -->
+    <string name="about_title">About</string>
+    <string name="about_version">Version 0.1.7 (Alpha build)</string>
+    <string name="about_copyright">©2014 crowdplay.nl</string>
+    <string name="about_feedback">Send feedback</string>
+    <string name="about_feedback_text">Tell us what you think</string>
+    <string name="about_report">Report a problem</string>
+    <string name="about_report_text">Let us know about a bug or problem</string>
+    <string name="about_app">Crowdplay allows you to quicly create high quality collaborative playlists. Optimized for Android.</string>
+    <string name="about_terms">Terms of Services</string>
+    <string name="about_privacy">Privacy Policy</string>
 
 </resources>
