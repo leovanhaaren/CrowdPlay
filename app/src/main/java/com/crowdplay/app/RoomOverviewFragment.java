@@ -1,7 +1,9 @@
 package com.crowdplay.app;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,13 +33,16 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
 
     private static final String TAG = "RoomOverviewFragment";
 
-    private ArrayList<Room> rooms;
-    private RoomsRepository roomsRepository;
+    private ArrayList<Room> mRooms;
+    private RoomsRepository mRoomsRepository;
 
     private EnhancedListView mListView;
     private RoomListAdapter  mAdapter;
 
-    private MenuItem menuItem;
+    private MenuItem mMenuItem;
+
+    private Activity mContext;
+    private View     mView;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -46,13 +51,14 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
 
         Log.v(TAG, "Initializing room overview");
 
-        View v = getView();
+        mContext = getActivity();
+        mView    = getView();
 
-        roomsRepository = new RoomsRepository(getActivity());
-        rooms           = roomsRepository.getAll();
+        mRoomsRepository = new RoomsRepository(mContext);
+        mRooms = mRoomsRepository.getAll();
 
-        mListView = (EnhancedListView) v.findViewById(R.id.listView);
-        mAdapter = new RoomListAdapter(getActivity(), rooms);
+        mListView = (EnhancedListView) mView.findViewById(R.id.listView);
+        mAdapter  = new RoomListAdapter(mContext, mRooms);
         mListView.setAdapter(mAdapter);
 
         mListView.setOnItemClickListener(this);
@@ -75,7 +81,7 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
                     // Delete item completely from your persistent storage
                     @Override
                     public void discard() {
-                        roomsRepository.delete(item);
+                        mRoomsRepository.delete(item);
                     }
                 };
             }
@@ -107,11 +113,11 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
 
                 return true;
             case R.id.rooms_overview_action_refresh:
-                Toast.makeText(getActivity(), R.string.room_overview_action_refresh_message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.room_overview_action_refresh_message, Toast.LENGTH_SHORT).show();
 
-                menuItem = item;
-                menuItem.setActionView(R.layout.room_search_layout);
-                menuItem.expandActionView();
+                mMenuItem = item;
+                mMenuItem.setActionView(R.layout.room_search_layout);
+                mMenuItem.expandActionView();
                 TestTask task = new TestTask();
                 task.execute("test");
 
@@ -130,25 +136,11 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
         mListView.setVisibility((mAdapter.getCount() == 0) ? View.INVISIBLE : View.VISIBLE);
     }
 
-    /*public void openRoom(Room room) {
-        Intent intent = new Intent(getActivity(), RoomPlayActivity.class);
-        intent.putExtra("roomId", room.getId());
-        startActivity(intent);
-        //this.overridePendingTransition(R.anim.animation_sub_enter, R.anim.animation_main_leave);
-    }
-
-    public void openRoomPlaylist(Room room) {
-        Intent roomPlay = new Intent(this, RoomPlaylistActivity.class);
-        roomPlay.putExtra("roomId", room.getId());
-        startActivity(roomPlay);
-        //this.overridePendingTransition(R.anim.animation_sub_enter, R.anim.animation_main_leave);
-    }*/
-
     public void showDialog() {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View dialoglayout       = inflater.inflate(R.layout.dialog_layout, (ViewGroup) getActivity().getCurrentFocus());
+        LayoutInflater inflater = mContext.getLayoutInflater();
+        final View dialoglayout = inflater.inflate(R.layout.dialog_layout, (ViewGroup) mView.findViewById(R.id.dialogLayout));
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 
         builder.setTitle(R.string.room_overview_dialog_title);
         builder.setView(dialoglayout);
@@ -158,16 +150,15 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
                 String roomName = name.getText().toString();
 
                 if(roomName.length() == 0) {
-                    Toast.makeText(getActivity(), R.string.room_overview_dialog_field_empty, Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(mContext, R.string.room_overview_dialog_field_empty, Toast.LENGTH_SHORT).show();
                 } else {
                     // Get android id to indentify room owner
-                    String androidId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+                    String androidId = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
 
                     Room room = new Room(roomName, androidId);
-                    roomsRepository.save(room);
+                    mRoomsRepository.save(room);
 
-                    //openRoom(room);
+                    openRoom(room);
                 }
             }
         });
@@ -179,6 +170,19 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public void openRoom(Room room) {
+        Bundle args = new Bundle();
+        args.putInt("roomId", room.getId());
+
+        FragmentManager  fragmentManager = getFragmentManager();
+        RoomPlayFragment fragment        = new RoomPlayFragment();
+
+        fragment.setArguments(args);
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit();
     }
 
     private class TestTask extends AsyncTask<String, Void, String> {
@@ -196,10 +200,10 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
 
         @Override
         protected void onPostExecute(String result) {
-            menuItem.collapseActionView();
-            menuItem.setActionView(null);
+            mMenuItem.collapseActionView();
+            mMenuItem.setActionView(null);
 
-            Toast.makeText(getActivity(), R.string.room_overview_action_refresh_noresults, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, R.string.room_overview_action_refresh_noresults, Toast.LENGTH_SHORT).show();
         }
     };
 

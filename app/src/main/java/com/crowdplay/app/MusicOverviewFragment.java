@@ -42,7 +42,7 @@ public class MusicOverviewFragment extends Fragment implements AdapterView.OnIte
     private ListView     mListView;
     private TrackAdapter mAdapter;
 
-    private int roomId;
+    private int  roomId;
     private Room room;
 
     @Override
@@ -140,8 +140,8 @@ public class MusicOverviewFragment extends Fragment implements AdapterView.OnIte
 
                 Uri sArtworkUri     = Uri.parse("content://media/external/audio/albumart");
                 Uri uri             = ContentUris.withAppendedId(sArtworkUri, albumId);
-
                 ContentResolver res = getActivity().getContentResolver();
+
                 try {
                     InputStream in      = res.openInputStream(uri);
                     Bitmap artwork      = BitmapFactory.decodeStream(in);
@@ -156,16 +156,6 @@ public class MusicOverviewFragment extends Fragment implements AdapterView.OnIte
             }
             while (musicCursor.moveToNext());
         }
-    }
-
-    public String getRealPathFromURI(Uri contentUri) {
-        String[] proj = { MediaStore.Images.Media.DATA };
-        Cursor cursor = getActivity().getContentResolver().query(contentUri, proj,
-                null, null, null);
-        int column_index = cursor
-                .getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
     }
 
 }

@@ -1,25 +1,24 @@
 package com.crowdplay.app;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.crowdplay.app.MusicService.MusicBinder;
 import com.crowdplay.app.adapters.PlayListAdapter;
@@ -34,7 +33,7 @@ import de.timroes.android.listview.EnhancedListView;
 import de.timroes.android.listview.EnhancedListView.OnDismissCallback;
 
 
-public class RoomPlayActivity extends Activity implements SeekBar.OnSeekBarChangeListener {
+public class RoomPlayFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
 
     private static final String TAG = "RoomPlayActivity";
 
@@ -44,8 +43,8 @@ public class RoomPlayActivity extends Activity implements SeekBar.OnSeekBarChang
     private EnhancedListView mListView;
     private PlayListAdapter  mAdapter;
 
-    private int  roomId;
-    private Room room;
+    private int  mRoomId;
+    private Room mRoom;
 
     private MusicService musicService;
     private Intent       playIntent;
@@ -60,40 +59,37 @@ public class RoomPlayActivity extends Activity implements SeekBar.OnSeekBarChang
 
     private SeekBar  seekBar;
 
-    private ImageButton prevButton;
     private ImageButton playButton;
-    private ImageButton nextButton;
+
+    private Activity mContext;
+    private View mView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_room_play);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        setHasOptionsMenu(true);
 
-        currentTitle = (TextView) findViewById(R.id.currentTitle);
-        currentTime = (TextView) findViewById(R.id.currentTime);
-        totalTime = (TextView) findViewById(R.id.totalTime);
+        Log.v(TAG, "Initializing room play");
 
-        seekBar = (SeekBar) findViewById(R.id.seekBar);
+        mContext = getActivity();
+        mView    = getView();
+        mRoomId  = getArguments().getInt("roomId");
 
-        playButton = (ImageButton) findViewById(R.id.playButton);
+        roomsRepository = new RoomsRepository(getActivity());
+        mRoom           = roomsRepository.getRoom(mRoomId);
 
-        mListView = (EnhancedListView) findViewById(R.id.listView);
+        currentTitle = (TextView)         mView.findViewById(R.id.currentTitle);
+        currentTime  = (TextView)         mView.findViewById(R.id.currentTime);
+        totalTime    = (TextView)         mView.findViewById(R.id.totalTime);
+        seekBar      = (SeekBar)          mView.findViewById(R.id.seekBar);
+        playButton   = (ImageButton)      mView.findViewById(R.id.playButton);
+        mListView    = (EnhancedListView) mView.findViewById(R.id.listView);
 
-        roomsRepository = new RoomsRepository(this);
-
-        roomId = getIntent().getExtras().getInt("roomId");
-        room = roomsRepository.getRoom(roomId);
-
-        playlist = new ArrayList<Track>(room.getPlaylist());
-        mAdapter = new PlayListAdapter(this, playlist);
+        playlist = new ArrayList<Track>(mRoom.getPlaylist());
+        mAdapter = new PlayListAdapter(mContext, playlist);
 
         mListView.setAdapter(mAdapter);
-
-        //mListView.setOnItemClickListener(this);
         seekBar.setOnSeekBarChangeListener(this);
-
-        // Set the callback that handles dismisses.
         mListView.setDismissCallback(new OnDismissCallback() {
             @Override
             public EnhancedListView.Undoable onDismiss(EnhancedListView listView, final int position) {
@@ -118,11 +114,22 @@ public class RoomPlayActivity extends Activity implements SeekBar.OnSeekBarChang
         mListView.enableSwipeToDismiss();
         mListView.setUndoStyle(EnhancedListView.UndoStyle.COLLAPSED_POPUP);
 
-        // Display the room's name as title for the activity
-        getActionBar().setTitle(room.getName());
+        // Display the mRoom's name as title for the mContext
+        mContext.getActionBar().setTitle(mRoom.getName());
 
         // Check if we have any results
         checkEmptyState();
+    }
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_room_play, container, false);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.room_play, menu);
     }
 
     private ServiceConnection musicConnection = new ServiceConnection(){
@@ -132,8 +139,7 @@ public class RoomPlayActivity extends Activity implements SeekBar.OnSeekBarChang
             MusicBinder binder = (MusicBinder)service;
 
             musicService = binder.getService();
-
-            musicBound = true;
+            musicBound   = true;
         }
 
         @Override
@@ -143,14 +149,14 @@ public class RoomPlayActivity extends Activity implements SeekBar.OnSeekBarChang
     };
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
 
         if(playIntent == null){
-            playIntent = new Intent(this, MusicService.class);
-            playIntent.putExtra("roomId", roomId);
-            bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
-            startService(playIntent);
+            playIntent = new Intent(mContext, MusicService.class);
+            playIntent.putExtra("roomId", mRoomId);
+            mContext.bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
+            mContext.startService(playIntent);
         }
     }
 
@@ -183,18 +189,12 @@ public class RoomPlayActivity extends Activity implements SeekBar.OnSeekBarChang
 
     }
 
-    /**
-     * When user starts moving the progress handler
-     * */
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
         // remove message Handler from updating progress bar
         mHandler.removeCallbacks(mUpdateTimeTask);
     }
 
-    /**
-     * When user stops moving the progress handler
-     * */
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         mHandler.removeCallbacks(mUpdateTimeTask);
@@ -213,41 +213,28 @@ public class RoomPlayActivity extends Activity implements SeekBar.OnSeekBarChang
         super.onResume();
 
         // Refresh listview, in case we added a track
-        playlist = new ArrayList<Track>(room.getPlaylist());
-        mAdapter = new PlayListAdapter(this, playlist);
+        playlist = new ArrayList<Track>(mRoom.getPlaylist());
+        mAdapter = new PlayListAdapter(mContext, playlist);
         mListView.setAdapter(mAdapter);
         mListView.invalidate();
 
         // Check if we have any results
         checkEmptyState();
-
-        Log.i(TAG, "Activity Life Cycle : onResume : Activity Resumed");
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
 
-        stopService(playIntent);
+        mContext.stopService(playIntent);
         musicService = null;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.room_play, menu);
-        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-
-                this.overridePendingTransition(R.anim.animation_main_enter, R.anim.animation_sub_leave);
-                return true;
             case R.id.room_play_action_edit:
-                showEditDialog();
+                //showEditDialog();
 
                 return true;
         }
@@ -288,26 +275,24 @@ public class RoomPlayActivity extends Activity implements SeekBar.OnSeekBarChang
         seekBar.setProgress(0);
         seekBar.setMax(100);
 
-        updateProgressBar();
+        //updateProgressBar();
     }
 
-    public void addMusic(View view) {
+    /*public void addMusic(View view) {
         Intent intent = new Intent(this, ContributorMusicOverviewActivity.class);
-        intent.putExtra("roomId", roomId);
+        intent.putExtra("mRoomId", mRoomId);
         startActivity(intent);
-
-        this.overridePendingTransition(R.anim.animation_sub_enter, R.anim.animation_main_leave);
     }
 
     public void showEditDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle(R.string.room_play_dialog_title);
 
         // Make a custom text field
-        final EditText name = new EditText(this);
+        final EditText name = new EditText(mContext);
         name.setHint(R.string.room_play_dialog_field);
         name.setSingleLine();
-        name.setText(room.getName());
+        name.setText(mRoom.getName());
         builder.setView(name);
 
         builder.setPositiveButton(R.string.room_play_dialog_ok, new DialogInterface.OnClickListener() {
@@ -315,15 +300,15 @@ public class RoomPlayActivity extends Activity implements SeekBar.OnSeekBarChang
                 String roomName  = name.getText().toString();
 
                 if(roomName.length() == 0) {
-                    Toast.makeText(getApplicationContext(), R.string.room_play_dialog_field_empty, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext.getApplicationContext(), R.string.room_play_dialog_field_empty, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                room.setName(roomName);
-                roomsRepository.update(room);
+                mRoom.setName(roomName);
+                roomsRepository.update(mRoom);
 
-                getActionBar().setTitle(room.getName());
-                Toast.makeText(getApplicationContext(), R.string.room_play_dialog_succes, Toast.LENGTH_SHORT).show();
+                mContext.getActionBar().setTitle(mRoom.getName());
+                Toast.makeText(mContext.getApplicationContext(), R.string.room_play_dialog_succes, Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNegativeButton(R.string.room_overview_dialog_cancel, new DialogInterface.OnClickListener() {
@@ -334,6 +319,6 @@ public class RoomPlayActivity extends Activity implements SeekBar.OnSeekBarChang
 
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
+    }*/
 
 }

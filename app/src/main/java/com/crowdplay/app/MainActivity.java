@@ -19,7 +19,7 @@ public class MainActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private ListView     mDrawerList;
 
-    private CharSequence mTitle;
+    private CharSequence          mTitle;
     private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
