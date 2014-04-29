@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:id="@+id/room_play_action_broadcast"
-        android:icon="@drawable/ic_action_network_wifi"
-        android:title="@string/room_play_action_broadcast"
-        android:enabled="false"
-        android:showAsAction="always" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item android:id="@+id/room_play_action_edit"
         android:icon="@drawable/ic_action_edit"
         android:title="@string/room_play_action_edit"
-        android:showAsAction="always" />
+        app:showAsAction="always" />
+
+    <item android:id="@+id/room_play_action_add"
+        android:icon="@drawable/ic_action_new"
+        android:title="@string/room_play_action_add"
+        app:showAsAction="always" />
 
 </menu>

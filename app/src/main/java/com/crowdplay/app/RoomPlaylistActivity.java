@@ -1,9 +1,8 @@
 package com.crowdplay.app;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -83,17 +82,15 @@ public class RoomPlaylistActivity extends Activity implements OnItemClickListene
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-
-                this.overridePendingTransition(R.anim.animation_main_enter, R.anim.animation_sub_leave);
-                return true;
             case R.id.room_play_action_add:
-                Intent intent = new Intent(this, ContributorMusicOverviewActivity.class);
-                intent.putExtra("roomId", roomId);
-                startActivityForResult(intent, 1);
+                FragmentManager fragmentManager = getFragmentManager();
+                MusicOverviewFragment fragment  = new MusicOverviewFragment();
 
-                this.overridePendingTransition(R.anim.animation_sub_enter, R.anim.animation_main_leave);
+                fragment.setRoomId(room.getId());
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .commit();
+
                 return true;
         }
         return super.onOptionsItemSelected(item);

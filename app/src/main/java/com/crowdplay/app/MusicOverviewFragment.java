@@ -1,11 +1,9 @@
 package com.crowdplay.app;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,8 +22,6 @@ import com.crowdplay.app.data.TracksRepository;
 import com.crowdplay.app.model.Room;
 import com.crowdplay.app.model.Track;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -57,6 +53,7 @@ public class MusicOverviewFragment extends Fragment implements AdapterView.OnIte
         tracksRepository = new TracksRepository(getActivity());
         roomsRepository  = new RoomsRepository(getActivity());
 
+        Log.v(TAG, "Room id: " + roomId);
         room      = roomsRepository.getRoom(roomId);
 
         mListView = (ListView) v.findViewById(R.id.listView);
@@ -94,14 +91,20 @@ public class MusicOverviewFragment extends Fragment implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        /*Track track  = mAdapter.getItem(position);
+        Track track  = mAdapter.getItem(position);
         track.setRoom(room);
 
         tracksRepository.create(track);
 
-        Intent returnIntent = new Intent();
-        setResult(RESULT_OK, returnIntent);
-        finish();*/
+        Log.v(TAG, "Added track: " + track.getTitle() + " to room: " + roomId);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        RoomPlayFragment fragment       = new RoomPlayFragment();
+
+        fragment.setRoomId(room.getId());
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit();
     }
 
     public void checkEmptyState() {
@@ -138,7 +141,9 @@ public class MusicOverviewFragment extends Fragment implements AdapterView.OnIte
                 long duration = musicCursor.getLong(durationColumn);
                 long albumId  = musicCursor.getLong(albumIdColumn);
 
-                Uri sArtworkUri     = Uri.parse("content://media/external/audio/albumart");
+                Track track = new Track(id, title, artist, album, albumId, duration);
+
+                /*Uri sArtworkUri     = Uri.parse("content://media/external/audio/albumart");
                 Uri uri             = ContentUris.withAppendedId(sArtworkUri, albumId);
                 ContentResolver res = getActivity().getContentResolver();
 
@@ -146,16 +151,20 @@ public class MusicOverviewFragment extends Fragment implements AdapterView.OnIte
                     InputStream in      = res.openInputStream(uri);
                     Bitmap artwork      = BitmapFactory.decodeStream(in);
 
-                    Track track = new Track(id, title, artist, album, albumId, duration);
                     track.setBitmap(artwork);
 
-                    tracks.add(track);
                 } catch(FileNotFoundException e) {
                     Log.v(TAG, e.toString());
-                }
+                }*/
+
+                tracks.add(track);
             }
             while (musicCursor.moveToNext());
         }
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
 
 }

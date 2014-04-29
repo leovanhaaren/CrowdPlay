@@ -1,16 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.crowdplay.app.RoomOverviewFragment" >
-
-    <item android:id="@+id/rooms_overview_action_refresh"
-        android:icon="@drawable/ic_action_refresh"
-        android:title="@string/room_overview_action_refresh"
-        app:showAsAction="ifRoom" />
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item android:id="@+id/rooms_overview_action_add"
         android:icon="@drawable/ic_action_new"
         android:title="@string/room_overview_action_add"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
 </menu>

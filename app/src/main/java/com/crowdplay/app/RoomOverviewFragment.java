@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -112,16 +111,6 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
                 showDialog();
 
                 return true;
-            case R.id.rooms_overview_action_refresh:
-                Toast.makeText(mContext, R.string.room_overview_action_refresh_message, Toast.LENGTH_SHORT).show();
-
-                mMenuItem = item;
-                mMenuItem.setActionView(R.layout.room_search_layout);
-                mMenuItem.expandActionView();
-                TestTask task = new TestTask();
-                task.execute("test");
-
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -129,7 +118,7 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Room room  = mAdapter.getItem(position);
-        //openRoomPlaylist(room);
+        openRoom(room);
     }
 
     public void checkEmptyState() {
@@ -173,38 +162,13 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
     }
 
     public void openRoom(Room room) {
-        Bundle args = new Bundle();
-        args.putInt("roomId", room.getId());
-
         FragmentManager  fragmentManager = getFragmentManager();
         RoomPlayFragment fragment        = new RoomPlayFragment();
 
-        fragment.setArguments(args);
+        fragment.setRoomId(room.getId());
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
     }
-
-    private class TestTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            // Simulate something long running
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            mMenuItem.collapseActionView();
-            mMenuItem.setActionView(null);
-
-            Toast.makeText(mContext, R.string.room_overview_action_refresh_noresults, Toast.LENGTH_SHORT).show();
-        }
-    };
 
 }

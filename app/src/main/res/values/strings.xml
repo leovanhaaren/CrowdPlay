@@ -41,7 +41,7 @@
     <string name="music_overview_title">Music</string>
     <string name="music_overview_search">Search</string>
     <string name="music_overview_emptystate_title">No music found</string>
-    <string name="music_overview_emptystate_text">Please add tracks to your device</string>
+    <string name="music_overview_emptystate_text">Please add music to your device</string>
     <!-- About -->
     <string name="about_title">About</string>
     <string name="about_version">Version 0.1.7 (Alpha build)</string>
