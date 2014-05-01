@@ -1,6 +1,8 @@
 package com.crowdplay.app.adapters;
 
+import android.content.ContentUris;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,9 @@ import android.widget.TextView;
 import com.crowdplay.app.R;
 import com.crowdplay.app.model.Room;
 import com.crowdplay.app.model.Track;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import java.util.ArrayList;
 
@@ -100,9 +105,20 @@ public class RoomListAdapter extends BaseAdapter {
         }
 
         // Set album art
-        if(currentTrack != null)
-            if(currentTrack.getBitmap() != null)
-                art.setImageBitmap(currentTrack.getBitmap());
+        if(currentTrack != null) {
+            Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
+            Uri imageUri = ContentUris.withAppendedId(sArtworkUri, currentTrack.getAlbumId());
+
+            ImageLoader imageLoader = ImageLoader.getInstance();
+            DisplayImageOptions options = new DisplayImageOptions.Builder()
+                    .cacheOnDisc(true)
+                    .cacheInMemory(false)
+                    .imageScaleType(ImageScaleType.EXACTLY)
+                    //.displayer(new FadeInBitmapDisplayer(1000))
+                    .build();
+
+            imageLoader.displayImage(imageUri.toString(), art, options);
+        }
 
         return v;
     }

@@ -20,21 +20,52 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/room_overview_emptystate_title"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_margin="20dp"
-                android:textAppearance="@style/EmptyState.Title" />
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
                 android:text="@string/room_overview_emptystate_text"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textAppearance="@style/EmptyState.Text"
-                android:layout_marginRight="55dp"
-                android:layout_marginLeft="55dp" />
+                android:textAppearance="@style/EmptyState.Rooms.Text"
+                android:layout_marginRight="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="20dp" />
+
+            <View
+                android:id="@+id/vertical_divider"
+                android:layout_height="1dp"
+                android:layout_width="fill_parent"
+                android:background="#ccc"
+                android:layout_below="@+id/art"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp" />
+
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:gravity="center"
+                android:id="@+id/create_button">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/imageView"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_action_new_blue" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/room_overview_emptystate_button"
+                    android:gravity="center"
+                    android:textAppearance="@style/EmptyState.Rooms.Button"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/imageView" />
+
+            </RelativeLayout>
+
         </LinearLayout>
 
         <de.timroes.android.listview.EnhancedListView

@@ -56,20 +56,20 @@
             android:layout_width="1dp"
             android:background="#ccc"
             android:layout_centerVertical="true"
-            android:layout_alignLeft="@+id/voteButton"
-            android:layout_alignStart="@+id/voteButton" />
+            android:layout_alignLeft="@+id/vote"
+            android:layout_alignStart="@+id/vote" />
 
-        <ImageButton
+        <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:id="@+id/voteButton"
+            android:id="@+id/vote"
             android:layout_alignWithParentIfMissing="false"
             android:layout_alignTop="@+id/vertical_divider"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:src="@drawable/ic_action_good"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_marginBottom="2dp" />
+            android:layout_marginBottom="2dp"
+            android:scaleType="center" />
 
     </RelativeLayout>
 

@@ -1,20 +1,25 @@
 package com.crowdplay.app;
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.crowdplay.app.adapters.TrackAdapter;
 import com.crowdplay.app.data.RoomsRepository;
@@ -26,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class MusicOverviewFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class MusicOverviewFragment extends Fragment implements AdapterView.OnItemClickListener, AbsListView.MultiChoiceModeListener {
 
     private static final String TAG = "MusicOverviewActivity";
 
@@ -35,11 +40,13 @@ public class MusicOverviewFragment extends Fragment implements AdapterView.OnIte
     private TracksRepository tracksRepository;
     private RoomsRepository  roomsRepository;
 
+    private MusicService     musicService;
+
     private ListView     mListView;
     private TrackAdapter mAdapter;
 
-    private int  roomId;
-    private Room room;
+    private Activity mContext;
+    private View mView;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -48,15 +55,17 @@ public class MusicOverviewFragment extends Fragment implements AdapterView.OnIte
 
         Log.v(TAG, "Initializing music overview");
 
-        View v = getView();
+        mContext = getActivity();
+        mView    = getView();
+
+        if(mContext instanceof MainActivity) {
+            musicService = ((MainActivity) mContext).getMusicService();
+        }
 
         tracksRepository = new TracksRepository(getActivity());
         roomsRepository  = new RoomsRepository(getActivity());
 
-        Log.v(TAG, "Room id: " + roomId);
-        room      = roomsRepository.getRoom(roomId);
-
-        mListView = (ListView) v.findViewById(R.id.listView);
+        mListView = (ListView) mView.findViewById(R.id.listView);
 
         tracks = new ArrayList<Track>();
 
@@ -73,6 +82,10 @@ public class MusicOverviewFragment extends Fragment implements AdapterView.OnIte
 
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
+
+        // Only allow host to select multiple tracks
+        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        mListView.setMultiChoiceModeListener(this);
 
         // Check if we have any results
         checkEmptyState();
@@ -91,20 +104,18 @@ public class MusicOverviewFragment extends Fragment implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        Room room = musicService.getRoom();
+        if(room == null) {
+            room = new Room(android.os.Build.MODEL, musicService.getDeviceID());
+            roomsRepository.save(room);
+        }
+
         Track track  = mAdapter.getItem(position);
         track.setRoom(room);
 
         tracksRepository.create(track);
 
-        Log.v(TAG, "Added track: " + track.getTitle() + " to room: " + roomId);
-
-        FragmentManager fragmentManager = getFragmentManager();
-        RoomPlayFragment fragment       = new RoomPlayFragment();
-
-        fragment.setRoomId(room.getId());
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .commit();
+        openRoom(room);
     }
 
     public void checkEmptyState() {
@@ -143,28 +154,97 @@ public class MusicOverviewFragment extends Fragment implements AdapterView.OnIte
 
                 Track track = new Track(id, title, artist, album, albumId, duration);
 
-                /*Uri sArtworkUri     = Uri.parse("content://media/external/audio/albumart");
-                Uri uri             = ContentUris.withAppendedId(sArtworkUri, albumId);
-                ContentResolver res = getActivity().getContentResolver();
-
-                try {
-                    InputStream in      = res.openInputStream(uri);
-                    Bitmap artwork      = BitmapFactory.decodeStream(in);
-
-                    track.setBitmap(artwork);
-
-                } catch(FileNotFoundException e) {
-                    Log.v(TAG, e.toString());
-                }*/
-
                 tracks.add(track);
             }
             while (musicCursor.moveToNext());
         }
     }
 
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
+    @Override
+    public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+        final int checkedCount = mListView.getCheckedItemCount();
+        mode.setTitle(checkedCount + " selected");
+        mAdapter.toggleSelection(position);
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.add:
+                addTracksToRoom(musicService.getRoom());
+
+                String message = mContext.getResources().getString(R.string.music_overview_context_add_selection, mListView.getCheckedItemCount());
+                Toast.makeText(mContext.getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                mode.finish();
+                openRoom(musicService.getRoom());
+
+                return true;
+            case R.id.host:
+                // TODO: change this back to device id
+                Room room = new Room(android.os.Build.MODEL, "123");
+                roomsRepository.save(room);
+
+                addTracksToRoom(room);
+
+                mode.finish();
+                openRoom(room);
+
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        MenuInflater inflater = mode.getMenuInflater();
+        if(!musicService.hasRoom())
+            inflater.inflate(R.menu.music_overview_context_add, menu);
+        else
+            inflater.inflate(R.menu.music_overview_context_host, menu);
+
+        return true;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    public void addTracksToRoom(Room room) {
+        SparseBooleanArray selected = mAdapter.getSelectedIds();
+        for (int i = (selected.size() - 1); i >= 0; i--) {
+            if (selected.valueAt(i)) {
+                Track track  = mAdapter.getItem(selected.keyAt(i));
+                track.setRoom(room);
+
+                tracksRepository.create(track);
+            }
+        }
+    }
+
+    public void openRoom(Room room) {
+        // Load selected room into service for playback
+        musicService.loadRoom(room);
+
+        // Check if we own the current room
+        if(musicService.isHost()) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, new RoomPlayFragment())
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, new RoomPlaylistFragment())
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
 }

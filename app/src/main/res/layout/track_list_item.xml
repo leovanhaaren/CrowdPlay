@@ -7,7 +7,8 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="32dp">
+        android:paddingRight="32dp"
+        android:background="?android:activatedBackgroundIndicator">
 
         <ImageView
             android:layout_width="64dp"

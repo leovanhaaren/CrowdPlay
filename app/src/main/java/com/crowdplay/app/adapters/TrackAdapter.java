@@ -1,6 +1,9 @@
 package com.crowdplay.app.adapters;
 
+import android.content.ContentUris;
 import android.content.Context;
+import android.net.Uri;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +13,9 @@ import android.widget.TextView;
 
 import com.crowdplay.app.R;
 import com.crowdplay.app.model.Track;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import java.util.ArrayList;
 
@@ -21,11 +27,13 @@ public class TrackAdapter extends BaseAdapter {
     private Context          context;
     private ArrayList<Track> items;
     private LayoutInflater   inflater;
+    private SparseBooleanArray mSelectedItemsIds;
 
     public TrackAdapter(Context c, ArrayList<Track> e) {
         inflater = LayoutInflater.from(c);
         context  = c;
         items = e;
+        mSelectedItemsIds = new SparseBooleanArray();
     }
 
     public void remove(int position) {
@@ -62,30 +70,56 @@ public class TrackAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
 
-        if(v == null) {
+        if (v == null) {
             v = inflater.inflate(R.layout.track_list_item, parent, false);
-            v.setTag(R.id.title,    v.findViewById(R.id.title));
-            v.setTag(R.id.artist,   v.findViewById(R.id.artist));
-            //v.setTag(R.id.duration, v.findViewById(R.id.duration));
-            v.setTag(R.id.art,      v.findViewById(R.id.art));
+            v.setTag(R.id.title,  v.findViewById(R.id.title));
+            v.setTag(R.id.artist, v.findViewById(R.id.artist));
+            v.setTag(R.id.art,    v.findViewById(R.id.art));
         }
 
-        TextView  title    = (TextView) v.getTag(R.id.title);
-        TextView  artist   = (TextView) v.getTag(R.id.artist);
-        //TextView  duration = (TextView) v.getTag(R.id.duration);
-        ImageView art      = (ImageView)v.getTag(R.id.art);
+        TextView  title  = (TextView)  v.getTag(R.id.title);
+        TextView  artist = (TextView)  v.getTag(R.id.artist);
+        ImageView art    = (ImageView) v.getTag(R.id.art);
 
         Track track = getItem(position);
 
         title.setText(track.getTitle());
         artist.setText(track.getArtist());
-        //duration.setText(Convert.getDurationBreakdown(track.getDuration()));
 
-        // Set album art
-        if(track.getBitmap() != null)
-            art.setImageBitmap(track.getBitmap());
+        Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
+        Uri imageUri = ContentUris.withAppendedId(sArtworkUri, track.getAlbumId());
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheOnDisc(true)
+                .cacheInMemory(false)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .build();
+
+        imageLoader.displayImage(imageUri.toString(), art, options);
 
         return v;
+    }
+
+    public void toggleSelection(int position) {
+        selectView(position, !mSelectedItemsIds.get(position));
+    }
+
+    public void selectView(int position, boolean value) {
+        if (value)
+            mSelectedItemsIds.put(position, value);
+        else
+            mSelectedItemsIds.delete(position);
+        notifyDataSetChanged();
+    }
+
+    public void removeSelection() {
+        mSelectedItemsIds = new SparseBooleanArray();
+        notifyDataSetChanged();
+    }
+
+    public SparseBooleanArray getSelectedIds() {
+        return mSelectedItemsIds;
     }
 
 }

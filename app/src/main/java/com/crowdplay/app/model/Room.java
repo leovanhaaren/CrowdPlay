@@ -25,7 +25,7 @@ public class Room {
     @DatabaseField
     private Date date;
 
-    @DatabaseField(foreign = true, canBeNull = true)
+    @DatabaseField(canBeNull = true, foreign = true, foreignAutoRefresh = true)
     private Track currentTrack;
 
     @ForeignCollectionField

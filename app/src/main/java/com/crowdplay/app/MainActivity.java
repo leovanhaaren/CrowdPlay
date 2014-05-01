@@ -2,18 +2,30 @@ package com.crowdplay.app;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class MainActivity extends ActionBarActivity {
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+
+public class MainActivity extends ActionBarActivity implements ServiceConnection {
+
+    private static final String TAG = "MainActivity";
 
     private String[]     mMenuItems;
     private DrawerLayout mDrawerLayout;
@@ -22,17 +34,13 @@ public class MainActivity extends ActionBarActivity {
     private CharSequence          mTitle;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private MusicService musicService;
+    private Intent       musicServiceIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // update the main content by loading the default fragment
-        FragmentManager fragmentManager = getFragmentManager();
-        RoomOverviewFragment fragment = new RoomOverviewFragment();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .commit();
 
         // Get default title
         mTitle = getString(R.string.room_overview_title);
@@ -71,11 +79,57 @@ public class MainActivity extends ActionBarActivity {
 
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        getSupportFragmentManager().addOnBackStackChangedListener(new android.support.v4.app.FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                setActionBarArrowDependingOnFragmentsBackStack();
+            }
+        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Disable logo in action bar
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        // Init imageloader lib
+        initImageLoader(getApplicationContext());
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
+
+        musicService = binder.getService();
+        Log.v(TAG, "Music service connected ");
+
+        // update the main content by loading the default fragment
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, new RoomOverviewFragment())
+                .commit();
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        Log.v(TAG, "Music service disconnected");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if(musicServiceIntent == null){
+            musicServiceIntent = new Intent(this, MusicService.class);
+            this.bindService(musicServiceIntent, this, Context.BIND_AUTO_CREATE);
+            this.startService(musicServiceIntent);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        this.stopService(musicServiceIntent);
+        musicService = null;
     }
 
     @Override
@@ -93,14 +147,13 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (mDrawerToggle.isDrawerIndicatorEnabled() && mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
+        } else if (item.getItemId() == android.R.id.home && getSupportFragmentManager().popBackStackImmediate()) {
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-        // Handle your other action bar items...
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -145,6 +198,27 @@ public class MainActivity extends ActionBarActivity {
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             selectItem(position);
         }
+    }
+
+    private void setActionBarArrowDependingOnFragmentsBackStack() {
+        int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
+        boolean shouldEnableDrawerIndicator = backStackEntryCount == 0;
+        mDrawerToggle.setDrawerIndicatorEnabled(shouldEnableDrawerIndicator);
+    }
+
+    public static void initImageLoader(Context context) {
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .denyCacheImageMultipleSizesInMemory()
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                //.writeDebugLogs() // Remove for release app
+                .build();
+
+        ImageLoader.getInstance().init(config);
+    }
+
+    public MusicService getMusicService() {
+        return musicService;
     }
 
 }

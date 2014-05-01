@@ -2,11 +2,9 @@ package com.crowdplay.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.crowdplay.app.adapters.RoomListAdapter;
@@ -28,12 +27,16 @@ import de.timroes.android.listview.EnhancedListView;
 import de.timroes.android.listview.EnhancedListView.OnDismissCallback;
 
 
-public class RoomOverviewFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class RoomOverviewFragment extends ListFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private static final String TAG = "RoomOverviewFragment";
 
     private ArrayList<Room> mRooms;
     private RoomsRepository mRoomsRepository;
+
+    private MusicService     musicService;
+
+    private RelativeLayout   mCreateButton;
 
     private EnhancedListView mListView;
     private RoomListAdapter  mAdapter;
@@ -53,8 +56,15 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
         mContext = getActivity();
         mView    = getView();
 
+        if(mContext instanceof MainActivity) {
+            musicService = ((MainActivity) mContext).getMusicService();
+        }
+
         mRoomsRepository = new RoomsRepository(mContext);
         mRooms = mRoomsRepository.getAll();
+
+        mCreateButton = (RelativeLayout) mView.findViewById(R.id.create_button);
+        mCreateButton.setOnClickListener(this);
 
         mListView = (EnhancedListView) mView.findViewById(R.id.listView);
         mAdapter  = new RoomListAdapter(mContext, mRooms);
@@ -116,6 +126,11 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
     }
 
     @Override
+    public void onClick(View view) {
+        showDialog();
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Room room  = mAdapter.getItem(position);
         openRoom(room);
@@ -141,10 +156,7 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
                 if(roomName.length() == 0) {
                     Toast.makeText(mContext, R.string.room_overview_dialog_field_empty, Toast.LENGTH_SHORT).show();
                 } else {
-                    // Get android id to indentify room owner
-                    String androidId = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
-
-                    Room room = new Room(roomName, androidId);
+                    Room room = new Room(roomName, musicService.getDeviceID());
                     mRoomsRepository.save(room);
 
                     openRoom(room);
@@ -162,13 +174,21 @@ public class RoomOverviewFragment extends Fragment implements AdapterView.OnItem
     }
 
     public void openRoom(Room room) {
-        FragmentManager  fragmentManager = getFragmentManager();
-        RoomPlayFragment fragment        = new RoomPlayFragment();
+        // Load selected room into service for playback
+        musicService.loadRoom(room);
 
-        fragment.setRoomId(room.getId());
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .commit();
+        // Check if we own the current room
+        if(musicService.isHost()) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, new RoomPlayFragment())
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, new RoomPlaylistFragment())
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
 }

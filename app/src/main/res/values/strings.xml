@@ -18,13 +18,14 @@
     <string name="room_overview_dialog_cancel">Cancel</string>
     <string name="room_overview_dialog_ok">Create</string>
     <string name="room_overview_dialog_field_empty">Please enter a name</string>
-    <string name="room_overview_emptystate_title">No rooms found</string>
-    <string name="room_overview_emptystate_text">To search for rooms, press icon in the menu to refresh</string>
+    <string name="room_overview_emptystate_text">No rooms found. Rooms will be automatically discovered.</string>
+    <string name="room_overview_emptystate_button">Host room</string>
     <!-- Host -->
     <string name="room_play_title">Play</string>
     <string name="room_play_action_broadcast">Broadcast room</string>
     <string name="room_play_action_edit">Edit room</string>
     <string name="room_play_action_add">Add track</string>
+    <string name="room_play_action_disconnect">Disconnect</string>
     <string name="room_play_dialog_title">Edit room</string>
     <string name="room_play_dialog_field">name</string>
     <string name="room_play_dialog_cancel">Cancel</string>
@@ -40,6 +41,10 @@
     <!-- Music -->
     <string name="music_overview_title">Music</string>
     <string name="music_overview_search">Search</string>
+    <string name="music_overview_context_selection">selected</string>
+    <string name="music_overview_context_add">Add</string>
+    <string name="music_overview_context_host">Host</string>
+    <string name="music_overview_context_add_selection">Added %d tracks</string>
     <string name="music_overview_emptystate_title">No music found</string>
     <string name="music_overview_emptystate_text">Please add music to your device</string>
     <!-- About -->

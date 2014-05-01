@@ -87,7 +87,8 @@
                 android:layout_height="match_parent"
                 android:id="@+id/room_list_item_art"
                 android:scaleType="centerCrop"
-                android:background="#eee" />
+                android:background="#ccc"
+                android:src="@drawable/logo_highres" />
         </LinearLayout>
 
     </LinearLayout>

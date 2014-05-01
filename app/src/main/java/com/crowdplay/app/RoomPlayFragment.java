@@ -4,14 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,17 +13,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crowdplay.app.MusicService.MusicBinder;
 import com.crowdplay.app.adapters.PlayListAdapter;
 import com.crowdplay.app.data.RoomsRepository;
 import com.crowdplay.app.data.TracksRepository;
-import com.crowdplay.app.model.Room;
 import com.crowdplay.app.model.Track;
 
 import java.util.ArrayList;
@@ -38,26 +29,18 @@ import de.timroes.android.listview.EnhancedListView;
 import de.timroes.android.listview.EnhancedListView.OnDismissCallback;
 
 
-public class RoomPlayFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class RoomPlayFragment extends Fragment implements View.OnClickListener, OnDismissCallback {
 
-    private static final String TAG = "RoomPlayActivity";
+    private static final String TAG = "RoomPlayFragment";
 
     private ArrayList<Track> playlist;
     private RoomsRepository  roomsRepository;
     private TracksRepository tracksRepository;
 
+    private MusicService     musicService;
+
     private EnhancedListView mListView;
     private PlayListAdapter  mAdapter;
-
-    private int  mRoomId;
-    private Room mRoom;
-
-    private MusicService musicService;
-    private Intent       playIntent;
-
-    private boolean musicBound = false;
-
-    private Handler  mHandler = new Handler();
 
     private TextView currentTitle;
     private TextView currentArtist;
@@ -77,9 +60,12 @@ public class RoomPlayFragment extends Fragment implements View.OnClickListener, 
         mContext = getActivity();
         mView    = getView();
 
+        if(mContext instanceof MainActivity) {
+            musicService = ((MainActivity) mContext).getMusicService();
+        }
+
         roomsRepository  = new RoomsRepository(getActivity());
         tracksRepository = new TracksRepository(getActivity());
-        mRoom            = roomsRepository.getRoom(mRoomId);
 
         currentTitle  = (TextView)         mView.findViewById(R.id.currentTitle);
         currentArtist = (TextView)         mView.findViewById(R.id.currentArtist);
@@ -87,43 +73,19 @@ public class RoomPlayFragment extends Fragment implements View.OnClickListener, 
         mListView     = (EnhancedListView) mView.findViewById(R.id.listView);
 
         playButton.setOnClickListener(this);
-        mListView.setOnItemClickListener(this);
 
-        playlist = new ArrayList<Track>(mRoom.getPlaylist());
+        playlist = new ArrayList<Track>(musicService.getRoom().getPlaylist());
         mAdapter = new PlayListAdapter(mContext, playlist);
 
         mListView.setAdapter(mAdapter);
-        mListView.setDismissCallback(new OnDismissCallback() {
-            @Override
-            public EnhancedListView.Undoable onDismiss(EnhancedListView listView, final int position) {
-
-                final Track item = (Track) mAdapter.getItem(position);
-                mAdapter.remove(position);
-                checkEmptyState();
-                return new EnhancedListView.Undoable() {
-                    // Reinsert the item to the adapter
-                    @Override
-                    public void undo() {
-                        mAdapter.insert(position, item);
-                        checkEmptyState();
-                    }
-
-                    // Delete item completely from your persistent storage
-                    @Override
-                    public void discard() {
-                        tracksRepository.delete(item);
-                        checkEmptyState();
-                    }
-                };
-            }
-        });
+        mListView.setDismissCallback(this);
         mListView.enableSwipeToDismiss();
         mListView.setUndoStyle(EnhancedListView.UndoStyle.COLLAPSED_POPUP);
+        mListView.setRequireTouchBeforeDismiss(false);
 
         // Display the mRoom's name as title for the mContext
-        mContext.getActionBar().setTitle(mRoom.getName());
+        mContext.getActionBar().setTitle(musicService.getRoom().getName());
 
-        // Check if we have any results
         checkEmptyState();
     }
 
@@ -136,42 +98,6 @@ public class RoomPlayFragment extends Fragment implements View.OnClickListener, 
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.room_play, menu);
-    }
-
-    private ServiceConnection musicConnection = new ServiceConnection(){
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            MusicBinder binder = (MusicBinder)service;
-
-            musicService = binder.getService();
-            musicBound   = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            musicBound = false;
-        }
-    };
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        if(playIntent == null){
-            playIntent = new Intent(mContext, MusicService.class);
-            playIntent.putExtra("roomId", mRoomId);
-            mContext.bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
-            mContext.startService(playIntent);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        mContext.stopService(playIntent);
-        musicService = null;
     }
 
     @Override
@@ -193,39 +119,71 @@ public class RoomPlayFragment extends Fragment implements View.OnClickListener, 
         mListView.setVisibility((mListView.getCount() == 0) ? View.INVISIBLE : View.VISIBLE);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        Track track  = mAdapter.getItem(position);
-        musicService.setCurrentTrack(track);
+    public EnhancedListView.Undoable onDismiss(EnhancedListView listView, final int position) {
+
+        final Track item = (Track) mAdapter.getItem(position);
+        mAdapter.remove(position);
+        checkEmptyState();
+
+        return new EnhancedListView.Undoable() {
+
+            @Override
+            public void undo() {
+                mAdapter.insert(position, item);
+                checkEmptyState();
+            }
+
+            @Override
+            public void discard() {
+                tracksRepository.delete(item);
+                checkEmptyState();
+            }
+        };
     }
 
     public void onClick(View view) {
         playMusic();
     }
 
+    public void initPlaylist() {
+        if(musicService == null) return;
+
+        musicService.initPlaylist();
+
+        Track currentTrack = musicService.getCurrentTrack();
+
+        currentTitle.setSelected(true);
+        currentArtist.setSelected(true);
+        currentTitle.setText(currentTrack.getTitle());
+        currentArtist.setText(currentTrack.getArtist());
+    }
+
     public void playMusic() {
         if(musicService == null) return;
 
-        // Play song if we can
-        musicService.playSong();
+        if(musicService.getCurrentTrack() == null) {
+            Toast.makeText(mContext.getApplicationContext(), R.string.room_play_emptystate_title, Toast.LENGTH_SHORT).show();
+            initPlaylist();
 
-        Track currentTrack = musicService.getCurrentTrack();
-        if(currentTrack == null) return;
-
-        currentTitle.setText(currentTrack.getTitle());
-        currentTitle.setSelected(true);
-        playButton.setImageResource(R.drawable.ic_action_pause);
+            return;
+        }
 
         // check for already playing
         if(musicService.isPlaying()) {
             musicService.pause();
 
             currentTitle.setSelected(false);
+            currentArtist.setSelected(false);
+            currentTitle.setText(musicService.getCurrentTrack().getTitle());
+            currentArtist.setText(musicService.getCurrentTrack().getArtist());
             playButton.setImageResource(R.drawable.ic_action_play);
         } else {
             musicService.start();
 
             currentTitle.setSelected(true);
+            currentArtist.setSelected(true);
+            currentTitle.setText(musicService.getCurrentTrack().getTitle());
+            currentArtist.setText(musicService.getCurrentTrack().getArtist());
             playButton.setImageResource(R.drawable.ic_action_pause);
         }
     }
@@ -234,7 +192,6 @@ public class RoomPlayFragment extends Fragment implements View.OnClickListener, 
         FragmentManager fragmentManager = getFragmentManager();
         MusicOverviewFragment fragment  = new MusicOverviewFragment();
 
-        fragment.setRoomId(mRoom.getId());
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
@@ -248,7 +205,7 @@ public class RoomPlayFragment extends Fragment implements View.OnClickListener, 
         EditText name   = (EditText) dialoglayout.findViewById(R.id.name);
 
         builder.setTitle(R.string.room_play_dialog_title);
-        name.setText(mRoom.getName());
+        name.setText(musicService.getRoom().getName());
 
         builder.setView(dialoglayout);builder.setPositiveButton(R.string.room_play_dialog_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -260,10 +217,10 @@ public class RoomPlayFragment extends Fragment implements View.OnClickListener, 
                     return;
                 }
 
-                mRoom.setName(roomName);
-                roomsRepository.update(mRoom);
+                musicService.getRoom().setName(roomName);
+                roomsRepository.update(musicService.getRoom());
 
-                mContext.getActionBar().setTitle(mRoom.getName());
+                mContext.getActionBar().setTitle(musicService.getRoom().getName());
                 Toast.makeText(mContext.getApplicationContext(), R.string.room_play_dialog_succes, Toast.LENGTH_SHORT).show();
             }
         });
@@ -277,7 +234,4 @@ public class RoomPlayFragment extends Fragment implements View.OnClickListener, 
         dialog.show();
     }
 
-    public void setRoomId(int mRoomId) {
-        this.mRoomId = mRoomId;
-    }
 }

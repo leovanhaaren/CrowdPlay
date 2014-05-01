@@ -1,6 +1,8 @@
 package com.crowdplay.app.adapters;
 
+import android.content.ContentUris;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,9 @@ import android.widget.TextView;
 
 import com.crowdplay.app.R;
 import com.crowdplay.app.model.Track;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import java.util.ArrayList;
 
@@ -78,10 +83,17 @@ public class PlayListAdapter extends BaseAdapter {
         title.setText(track.getTitle());
         artist.setText(track.getArtist());
 
-        // Set album art
-        // TODO: FIX ALBUM ARTWORK
-        //int resourceId = context.getResources().getIdentifier(track.getArt().getIcon(), "drawable", context.getPackageName());
-        //art.setImageResource(resourceId);
+        Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
+        Uri imageUri = ContentUris.withAppendedId(sArtworkUri, track.getAlbumId());
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheOnDisc(true)
+                .cacheInMemory(false)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .build();
+
+        imageLoader.displayImage(imageUri.toString(), art, options);
 
         return v;
     }
